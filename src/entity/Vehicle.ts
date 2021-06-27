@@ -1,6 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 
 import { GasCar } from './GasCar';
+import { ElectricCar } from './ElectricCar';
+import { GasMotorbike } from './GasMotorbike';
+import { ElectricMotorbike } from './ElectricMotorbike';
+import { Bike } from './Bike';
 
 @Entity()
 export class Vehicle {
@@ -20,11 +24,22 @@ export class Vehicle {
     @Column({type: "tinyint"})
     type: number;
 
-    @OneToOne(() => GasCar, gasCar => gasCar.idVehicle)
-    gasCar: Promise<GasCar>;
+    //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
+    @OneToOne(() => GasCar, gasCar => gasCar.vehicle)
+    gasCar: GasCar;
 
-    // @OneToOne(() => ElectricCar, electricCar => electricCar.idVehicle)
-    // electricCar: ElectricCar;
+    @OneToOne(() => ElectricCar, electricCar => electricCar.vehicle)
+    electricCar: ElectricCar;
+
+    @OneToOne(() => GasMotorbike, gasMotorbike => gasMotorbike.vehicle)
+    gasMotorbike: GasMotorbike;
+
+    @OneToOne(() => ElectricMotorbike, electricMotorbike => electricMotorbike.vehicle)
+    electricMotorbike: ElectricMotorbike;
+
+    @OneToOne(() => Bike, bike => bike.vehicle)
+    bike: Bike;
+
 
 
 

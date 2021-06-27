@@ -8,10 +8,13 @@ export class VehicleRoutes
     //DECIDO QUALE METODO DEL CONTROLLER USARE PER OGNI /PATH
     public static setRoutes(app): void
     {
-        app.route('/vehicles')
-            .get(this.vehicleController.index)
+        app.route('/vehicles/preview')
+            .get(this.vehicleController.getPreview)
 
-        app.route('/vehicles/:brand/:model')
-            .get(this.vehicleController.ddddd)
+        app.route('/vehicles/cars')
+            .get(this.vehicleController.getCars)
+
+        app.route('/vehicles/motorbikes')
+            .get(this.vehicleController.getMotorbikes)
     }
 }

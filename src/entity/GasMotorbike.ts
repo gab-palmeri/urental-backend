@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "ty
 import { Vehicle } from './Vehicle';
 
 @Entity()
-export class GasCar {
+export class GasMotorbike {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,22 +12,16 @@ export class GasCar {
     licensePlate: string;
 
     @Column({type: "smallint"})
-    displacement: number;
+    capacity: number;
 
     @Column({type: "smallint"})
     kilowatt: number;
-
-    @Column({type: "tinyint"})
-    seats: number;
 
     @Column({type: "varchar", length:20})
     category: string;
 
     @Column({type: "varchar", length:20})
     consumption: string;
-
-    @Column({type: "varchar", length:10})
-    trunkSize: string;
 
     @Column({type: "bool"})
     shift: boolean;
@@ -38,12 +32,8 @@ export class GasCar {
     @Column({type: "varchar", length:16})
     fuel: string;
 
-    @OneToOne(() => Vehicle, vehicle => vehicle.gasCar, { eager: true })
+    @OneToOne(() => Vehicle, vehicle => vehicle.gasMotorbike, { eager: true })
     @JoinColumn()
     vehicle: Vehicle;
-
-
-
-
 
 }
