@@ -13,6 +13,7 @@ export const userSchema = Joi.object({
             'string.pattern.base': 'Inserire un nome valido',
             'string.min': 'Il nome deve essere di almeno 3 caratteri',
             'string.max': 'Il nome non può eccedere i 20 caratteri',
+            'string.empty': 'Il nome non può essere vuoto',
             'any.required': 'Il nome è obbligatorio'
         }),
 
@@ -25,6 +26,7 @@ export const userSchema = Joi.object({
             'string.pattern.base': 'Inserire un cognome valido',
             'string.min': 'Il cognome deve essere di almeno 3 caratteri',
             'string.max': 'Il cognome non può eccedere i 20 caratteri',
+            'string.empty': 'Il cognome non può essere vuoto',
             'any.required': 'Il cognome è obbligatorio'
         }),
 
@@ -34,6 +36,7 @@ export const userSchema = Joi.object({
         .required()
         .messages({
             'string.length': 'Il codice fiscale deve essere composto da 16 caratteri',
+            'string.empty': 'Il codice fiscale non può essere vuoto',
             'any.required': 'Il codice fiscale è obbligatorio'
         }),
 
@@ -56,14 +59,16 @@ export const userSchema = Joi.object({
             'string.pattern.base': 'Inserire un luogo di nascita valido',
             'string.min': 'Il luogo di nascita deve essere di almeno 3 caratteri',
             'string.max': 'Il luogo di nascita non può eccedere i 30 caratteri',
+            'string.empty': 'Il luogo di nascita non può essere vuoto',
             'any.required': 'Il luogo di nascita è obbligatorio'
         }),
 
     password: Joi.string()
-        .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'))
+        .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'))
         .required()
         .messages({
             'string.pattern.base': 'La password deve contenere almeno 8 caratteri di cui almeno una maiuscola e minuscola, un numero e un carattere speciale',
+            'string.empty': 'La password non può essere vuota',
             'any.required': 'La password è obbligatoria'
         }),
 
@@ -71,14 +76,16 @@ export const userSchema = Joi.object({
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'it'] } })
         .required()
         .messages({
-            'string.email': `L'email non è in un formato valido`,
-            'any.required': `L'email è obbligatoria`
+            'string.email': "L'email non è in un formato valido",
+            'string.empty': "L'email non può essere vuota",
+            'any.required': "L'email è obbligatoria"
         }),
     pin: Joi.string()
-        .pattern(new RegExp('[0-9]{4}'))
+        .pattern(new RegExp('^[0-9]{4}$'))
         .required()
         .messages({
             'string.pattern.base': `Il pin deve essere di 4 cifre`,
+            'string.empty': 'Il pin non può essere vuoto',
             'any.required': `Il pin è obbligatorio`
         })
 });

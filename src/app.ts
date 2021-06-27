@@ -76,6 +76,7 @@ export default new App().app;
 
 function errorHandler(err, req, res, next)
 {
+    console.log(err);
     res.status(err.status).send({
         "message": err.message
     });
