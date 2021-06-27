@@ -1,0 +1,21 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "pretty": true,
+        "target": "es6",
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+    },
+    "include": [
+        "./src/**/*.ts",
+        "./migration/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
