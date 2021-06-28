@@ -25,14 +25,15 @@ class App {
             this.config();
             this.router.setRoutes(this.app);
 
-            //VEDI IN FONDO AL FILE
-            this.app.use(errorHandler);
 
         }).catch(error => console.log(error));
     }
 
     private config(): void
     {
+        //PERMETTE DI ACCEDERE AI FILE STATICI (IMMAGINI)
+        this.app.use('/public', express.static('assets'));
+
         //IMPOSTAZIONI SERVER: ACCETTA SIA JSON, SIA x-www-form-urlencoded
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.json()) // To parse the incoming requests with JSON payloads
@@ -68,6 +69,9 @@ class App {
             }
         ));
 
+        //METODO PER LA GESTIONE DEGLI ERRORI
+        this.app.use(errorHandler);
+
     }
 
 }
@@ -76,7 +80,6 @@ export default new App().app;
 
 function errorHandler(err, req, res, next)
 {
-    console.log(err);
     res.status(err.status).send({
         "message": err.message
     });

@@ -30,7 +30,8 @@ export class UserController
             var token = jwt.sign({
                 "id": user.id,
                 'name': user.name,
-                'surname': user.surname
+                'surname': user.surname,
+                'role': 0
             }, privateKEY, jwtSettings);
 
             res.status(200).send({
