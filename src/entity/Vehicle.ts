@@ -5,6 +5,7 @@ import { ElectricCar } from './ElectricCar';
 import { GasMotorbike } from './GasMotorbike';
 import { ElectricMotorbike } from './ElectricMotorbike';
 import { Bike } from './Bike';
+import { Scooter } from './Scooter';
 
 @Entity()
 export class Vehicle {
@@ -24,6 +25,9 @@ export class Vehicle {
     @Column({type: "tinyint"})
     type: number;
 
+    @Column({type: "varchar", length:32})
+    imgUrl: string;
+
     //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
     @OneToOne(() => GasCar, gasCar => gasCar.vehicle)
     gasCar: GasCar;
@@ -40,9 +44,7 @@ export class Vehicle {
     @OneToOne(() => Bike, bike => bike.vehicle)
     bike: Bike;
 
-
-
-
-
+    @OneToOne(() => Scooter, scooter => scooter.vehicle)
+    scooter: Scooter;
 
 }

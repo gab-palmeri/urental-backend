@@ -13,8 +13,11 @@ export class VehicleRoutes
 
         app.route('/vehicles/cars')
             .get(this.vehicleController.getCars)
-
         app.route('/vehicles/motorbikes')
             .get(this.vehicleController.getMotorbikes)
+        app.route('/vehicles/bikes')
+            .get(this.vehicleController.getBikes)
+        app.route('/vehicles/scooters')
+            .get(this.vehicleController.getScooters)
     }
 }
