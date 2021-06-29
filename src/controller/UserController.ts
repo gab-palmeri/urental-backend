@@ -22,24 +22,26 @@ export class UserController
             return next(createHttpError(400, "Email o password assenti"));
 
         const user = await getRepository(User).findOne({where:{'email': req.body.email}})
+        if(user.active == 1)
+            if(user != null && bcrypt.compareSync(req.body.password, user.password))
+            {
+                var privateKEY  = fs.readFileSync('./keys/private.key', 'utf8');
 
-        if(user != null && bcrypt.compareSync(req.body.password, user.password))
-        {
-            var privateKEY  = fs.readFileSync('./keys/private.key', 'utf8');
+                var token = jwt.sign({
+                    "id": user.id,
+                    'name': user.name,
+                    'surname': user.surname,
+                    'role': 0
+                }, privateKEY, jwtSettings);
 
-            var token = jwt.sign({
-                "id": user.id,
-                'name': user.name,
-                'surname': user.surname,
-                'role': 0
-            }, privateKEY, jwtSettings);
-
-            res.status(200).send({
-                'token': token,
-            });
-        }
+                res.status(200).send({
+                    'token': token,
+                });
+            }
+            else
+                return next(createHttpError(400, "Email o password invalidi"));
         else
-            return next(createHttpError(400, "Email o password invalidi"));
+            return next(createHttpError(401, "Utente non attivato. Controlla la mail"));
     }
 
     //Creo un nuovo oggetto User solo dopo averne validato i campi, dopo faccio lo stesso con DrivingLicense
