@@ -8,7 +8,7 @@ import * as jwt from "jsonwebtoken";
 import * as fs from "fs";
 
 import { Driver } from "../entity/Driver";
-import { otherUsersSchema } from "./schemas/OtherUsersSchema";
+import { staffAndDriverSchema as DriverSchema} from "./schemas/StaffAndDriverSchema";
 
 
 export class DriverController{
@@ -46,7 +46,7 @@ export class DriverController{
         if(decodedToken["role"] != 2)
             return next(createHttpError(401, "Non hai i permessi per effettuare questa richiesta"));
 
-        let { error, value } = otherUsersSchema.validate(req.body, {allowUnknown: true});
+        let { error, value } = DriverSchema.validate(req.body, {allowUnknown: true});
 
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));

@@ -3,7 +3,7 @@ import JoiBase from "joi";
 
 const Joi = JoiBase.extend(JoiDate);
 
-export const otherUsersSchema = Joi.object({
+export const staffAndDriverSchema = Joi.object({
 
     name: Joi.string()
         .pattern(new RegExp('^[A-Za-z]{2,}([ ][A-Za-z]{2,})*$'))
