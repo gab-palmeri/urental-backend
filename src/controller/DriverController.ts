@@ -7,29 +7,29 @@ import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import * as fs from "fs";
 
-import { Staff } from "../entity/Staff";
+import { Driver } from "../entity/Driver";
 import { otherUsersSchema } from "./schemas/OtherUsersSchema";
 
 
-export class StaffController{
+export class DriverController{
 
     public async auth(req: Request, res: Response, next: any){
 
         if(req.body.email == undefined || req.body.password == undefined)
             return next(createHttpError(400, "Email o password assenti"));
 
-        const staff = await getRepository(Staff).findOne({where: {"email": req.body.email}})
+        const driver = await getRepository(Driver).findOne({where: {"email": req.body.email}})
 
-        if(staff == null || !bcrypt.compareSync(req.body.password, staff.password))
+        if(driver == null || !bcrypt.compareSync(req.body.password, driver.password))
             return next(createHttpError(400, "Email o password invalidi"));
 
         let privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
 
         let token = jwt.sign({
-            "email": staff.email,
-            "name": staff.name,
-            "surname": staff.surname,
-            "role": 2
+            "email": driver.email,
+            "name": driver.name,
+            "surname": driver.surname,
+            "role": 1
         }, privateKEY, jwtSettings);
 
         res.status(200).send({
@@ -51,29 +51,29 @@ export class StaffController{
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
-        let staff = new Staff();
+        let driver = new Driver();
 
         /*
             PAYLOAD INFORMATIONS
         */
 
-        staff.name = req.body.name;
-        staff.surname = req.body.surname;
-        staff.fiscalCode = req.body.fiscalCode;
-        staff.birthDate = req.body.birthDate;
-        staff.birthPlace = req.body.birthPlace;
-        staff.email = req.body.email;
-        staff.password = bcrypt.hashSync(req.body.password, 8);
+        driver.name = req.body.name;
+        driver.surname = req.body.surname;
+        driver.fiscalCode = req.body.fiscalCode;
+        driver.birthDate = req.body.birthDate;
+        driver.birthPlace = req.body.birthPlace;
+        driver.email = req.body.email;
+        driver.password = bcrypt.hashSync(req.body.password, 8);
 
         try{
 
-            await getRepository(Staff).save(staff);
+            await getRepository(Driver).save(driver);
             res.status(200).send();
         }
         catch(err){
 
             if(err.code == "ER_DUP_ENTRY")
-                return next(createHttpError(400, "Staff già esistente."));
+                return next(createHttpError(400, "Driver già esistente."));
             else
                 return next(createHttpError(500, "Errore interno al server."));
         }

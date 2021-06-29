@@ -64,7 +64,8 @@ class App {
                     "/users/auth",
                     "/users/register",
                     "/users/activate",
-                    "/staffs/auth"
+                    "/staffs/auth",
+                    "/drivers/auth"
                 ]
             }
         ));
