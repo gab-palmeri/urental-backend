@@ -25,6 +25,8 @@ class App {
             this.config();
             this.router.setRoutes(this.app);
 
+            //METODO PER LA GESTIONE DEGLI ERRORI
+            this.app.use(errorHandler);
 
         }).catch(error => console.log(error));
     }
@@ -69,11 +71,7 @@ class App {
             }
         ));
 
-        //METODO PER LA GESTIONE DEGLI ERRORI
-        this.app.use(errorHandler);
-
     }
-
 }
 
 export default new App().app;
