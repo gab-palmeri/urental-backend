@@ -66,12 +66,15 @@ class App {
                 path: [
                     "/users/auth",
                     "/users/register",
-                    "/users/activate"
+                    "/users/activate",
+                    "/staffs/auth",
+                    "/drivers/auth"
                 ]
             }
         ));
 
     }
+
 }
 
 export default new App().app;

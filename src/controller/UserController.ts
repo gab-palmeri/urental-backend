@@ -27,12 +27,10 @@ export class UserController
             {
                 var privateKEY  = fs.readFileSync('./keys/private.key', 'utf8');
 
-                var token = jwt.sign({
-                    "id": user.id,
-                    'name': user.name,
-                    'surname': user.surname,
-                    'role': 0
-                }, privateKEY, jwtSettings);
+            var token = jwt.sign({
+                "id": user.id,
+                'role': 0
+            }, privateKEY, jwtSettings);
 
                 res.status(200).send({
                     'token': token,
