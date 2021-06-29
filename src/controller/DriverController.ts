@@ -26,9 +26,7 @@ export class DriverController{
         let privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
 
         let token = jwt.sign({
-            "email": driver.email,
-            "name": driver.name,
-            "surname": driver.surname,
+            "id": driver.id,
             "role": 1
         }, privateKEY, jwtSettings);
 

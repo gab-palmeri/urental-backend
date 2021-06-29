@@ -26,10 +26,8 @@ export class StaffController{
         let privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
 
         let token = jwt.sign({
-            "email": staff.email,
-            "name": staff.name,
-            "surname": staff.surname,
-            "role": 2
+            "id": staff.id,
+            "role": 1
         }, privateKEY, jwtSettings);
 
         res.status(200).send({
