@@ -92,23 +92,29 @@ export class UserController
 
     public async activate(req: Request, res: Response, next:any)
     {
-        var symmetricKey  = fs.readFileSync('./keys/symmetric.key', 'utf8');
-        var token = req.query.token.toString().replace('xMl3Jk', '+' ).replace('Por21Ld', '/').replace('Ml32', '=');
-        var userEmail = CryptoJS.AES.decrypt(token, symmetricKey).toString(CryptoJS.enc.Utf8);
-
-        const user = await getRepository(User).findOne({where:{'email': userEmail}})
-        if(user != null)
+        if(req.query.token != undefined)
         {
-            try {
-                user.active = 1;
-                await getRepository(User).save(user);
-                res.status(200).send();
-            } catch (error) {
-                return next(createHttpError(500, "Errore interno al server."));
+            var symmetricKey  = fs.readFileSync('./keys/symmetric.key', 'utf8');
+            var token = req.query.token.toString().replace('xMl3Jk', '+' ).replace('Por21Ld', '/').replace('Ml32', '=');
+            var userEmail = CryptoJS.AES.decrypt(token, symmetricKey).toString(CryptoJS.enc.Utf8);
+
+            const user = await getRepository(User).findOne({where:{'email': userEmail}})
+            if(user != null)
+            {
+                try {
+                    user.active = 1;
+                    await getRepository(User).save(user);
+                    res.status(200).send();
+                } catch (error) {
+                    return next(createHttpError(500, "Errore interno al server."));
+                }
             }
+            else
+                return next(createHttpError(400, "Utente non esistente"));
         }
         else
-            return next(createHttpError(400, "Utente non esistente"));
+            return next(createHttpError(400, "Token invalido"));
+
     }
 
     public async changePin(req: Request, res: Response, next:any)
