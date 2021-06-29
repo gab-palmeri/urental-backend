@@ -15,9 +15,12 @@ export class VehicleRoutes
             .get(this.vehicleController.getCars)
         app.route('/vehicles/motorbikes')
             .get(this.vehicleController.getMotorbikes)
-        app.route('/vehicles/bikes')
-            .get(this.vehicleController.getBikes)
-        app.route('/vehicles/scooters')
-            .get(this.vehicleController.getScooters)
+        // app.route('/vehicles/bikes')
+        //     .get(this.vehicleController.getBikes)
+        // app.route('/vehicles/scooters')
+        //     .get(this.vehicleController.getScooters)
+
+        app.route('/vehicles/:brand-:model')
+            .get(this.vehicleController.getVehicleOptions)
     }
 }

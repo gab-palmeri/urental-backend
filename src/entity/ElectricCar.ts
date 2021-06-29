@@ -35,7 +35,7 @@ export class ElectricCar {
     @Column({type: "varchar", length:3})
     chargeDuration: string;
 
-    @OneToOne(() => Vehicle, vehicle => vehicle.electricCar, { eager: true })
+    @OneToOne(() => Vehicle, vehicle => vehicle.electricCar)
     @JoinColumn()
     vehicle: Vehicle;
 

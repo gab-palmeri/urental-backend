@@ -30,21 +30,21 @@ export class Vehicle {
 
     //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
     @OneToOne(() => GasCar, gasCar => gasCar.vehicle)
-    gasCar: GasCar;
+    gasCar: Promise<GasCar>;
 
     @OneToOne(() => ElectricCar, electricCar => electricCar.vehicle)
-    electricCar: ElectricCar;
+    electricCar: Promise<ElectricCar>;
 
     @OneToOne(() => GasMotorbike, gasMotorbike => gasMotorbike.vehicle)
-    gasMotorbike: GasMotorbike;
+    gasMotorbike: Promise<GasMotorbike>;
 
     @OneToOne(() => ElectricMotorbike, electricMotorbike => electricMotorbike.vehicle)
-    electricMotorbike: ElectricMotorbike;
+    electricMotorbike: Promise<ElectricMotorbike>;
 
     @OneToOne(() => Bike, bike => bike.vehicle)
-    bike: Bike;
+    bike: Promise<Bike>;
 
     @OneToOne(() => Scooter, scooter => scooter.vehicle)
-    scooter: Scooter;
+    scooter: Promise<Scooter>;
 
 }

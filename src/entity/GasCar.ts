@@ -38,7 +38,7 @@ export class GasCar {
     @Column({type: "varchar", length:16})
     fuel: string;
 
-    @OneToOne(() => Vehicle, vehicle => vehicle.gasCar, { eager: true })
+    @OneToOne(() => Vehicle, vehicle => vehicle.gasCar)
     @JoinColumn()
     vehicle: Vehicle;
 
