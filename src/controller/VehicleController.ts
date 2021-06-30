@@ -1,116 +1,83 @@
 import { Request, Response } from 'express';
-import { getRepository } from "typeorm";
+
 import createHttpError from 'http-errors';
 
+import * as vehicleService from '../services/vehicleService';
+
 import { Vehicle } from '../entity/Vehicle';
-import { GasCar } from '../entity/GasCar';
-import { ElectricCar } from '../entity/ElectricCar';
-import { GasMotorbike } from '../entity/GasMotorbike';
-import { ElectricMotorbike } from '../entity/ElectricMotorbike';
-import { Bike } from '../entity/Bike';
-import { Scooter } from '../entity/Scooter';
 
 export class VehicleController
 {
 
     public async getPreview(req: Request, res: Response, next:any)
     {
-        try {
+        Promise.resolve(vehicleService.getPreview()).then(function(value) {
 
-            const vehicles = await getRepository(Vehicle).createQueryBuilder("vehicle")
-                .select(['brand', 'model','type', 'imgUrl'])
-                .groupBy("vehicle.brand")
-                .addGroupBy("vehicle.model")
-                .getRawMany();
-
-            const cars = vehicles.filter(vehicle => vehicle.type >= 0 && vehicle.type <= 1);
-            const motorbikes = vehicles.filter(vehicle => vehicle.type >= 2 && vehicle.type <= 3);
-
-            //We will have one brand/model for bikes and one brand/model for scooters
-            const bike = vehicles.filter(vehicle => vehicle.type == 4);
-            const scooter = vehicles.filter(vehicle => vehicle.type == 5);
-
-            res.status(200).send([cars,motorbikes,bike,scooter]);
-
-        } catch(err)
-        {
-            console.log(err);
-            return next(createHttpError(500, "Errore interno al server."));
-        }
+            if(value.httpError == undefined)
+                res.status(200).send(value.vehiclesData);
+            else
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+        });
     }
 
     public async getCars(req: Request, res: Response, next:any)
     {
-        try {
+        Promise.resolve(vehicleService.getCars()).then(function(value) {
 
-            const cars = await getRepository(Vehicle).createQueryBuilder("vehicle")
-                .select(['brand', 'model', 'imgUrl'])
-                .where("vehicle.type >= 0")
-                .andWhere("vehicle.type <= 1")
-                .groupBy("vehicle.brand")
-                .addGroupBy("vehicle.model")
-                .getRawMany();
-
-            res.status(200).send(cars);
-
-        } catch (err) {
-            return next(createHttpError(500, "Errore interno al server."));
-        }
+            if(value.httpError == undefined)
+                res.status(200).send(value.carsData);
+            else
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+        });
     }
 
     public async getMotorbikes(req: Request, res: Response, next:any)
     {
-        try {
-            const motorbikes = await getRepository(Vehicle).createQueryBuilder("vehicle")
-                .select(['brand', 'model', 'imgUrl'])
-                .where("vehicle.type >= 2")
-                .andWhere("vehicle.type <= 3")
-                .groupBy("vehicle.brand")
-                .addGroupBy("vehicle.model")
-                .getRawMany();
+        Promise.resolve(vehicleService.getMotorbikes()).then(function(value) {
 
-            const gasMotorbikes = await getRepository(GasMotorbike).find({relations : ['vehicle']});
-            const electricMotorbikes = await getRepository(ElectricMotorbike).find({relations : ['vehicle']});
-
-            res.status(200).send([...gasMotorbikes, ...electricMotorbikes]);
-
-        } catch (error) {
-            return next(createHttpError(500, "Errore interno al server."));
-        }
+            if(value.httpError == undefined)
+                res.status(200).send(value.motorbikesData);
+            else
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+        });
     }
 
     //METODI PER I SINGOLI BRAND
     public async getVehicleOptions(req: Request, res: Response, next:any)
     {
-        var vehicles = await getRepository(Vehicle).find({ where: { brand: req.params.brand, model: req.params.model } });
+        Promise.resolve(vehicleService.getVehiclesByBrandAndModel(req.params.brand, req.params.model)).then(async function(value) {
 
-        var results: Vehicle[] = await Promise.all(vehicles.map(async (vehicle) => {
-            switch (vehicle.type) {
-                case 0:
-                    await vehicle.gasCar;
-                    break;
-                case 1:
-                    await vehicle.electricCar;
-                    break;
-                case 2:
-                    await vehicle.gasMotorbike;
-                    break;
-                case 3:
-                    await vehicle.electricMotorbike;
-                    break;
-                case 4:
-                    await vehicle.bike;
-                    break;
-                case 5:
-                    await vehicle.scooter;
-                    break;
-                default:
-                    break;
-            }
-            return vehicle;
-        }));
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
 
-        res.status(200).send(results);
+            var results: Vehicle[] = await Promise.all(value.vehiclesData.map(async (vehicle:Vehicle) => {
+                switch (vehicle.type) {
+                    case 0:
+                        await vehicle.gasCar;
+                        break;
+                    case 1:
+                        await vehicle.electricCar;
+                        break;
+                    case 2:
+                        await vehicle.gasMotorbike;
+                        break;
+                    case 3:
+                        await vehicle.electricMotorbike;
+                        break;
+                    case 4:
+                        await vehicle.bike;
+                        break;
+                    case 5:
+                        await vehicle.scooter;
+                        break;
+                    default:
+                        break;
+                }
+                return vehicle;
+            }));
+
+            res.status(200).send(results);
+        });
 
     }
 
