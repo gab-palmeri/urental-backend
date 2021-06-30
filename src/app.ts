@@ -68,7 +68,11 @@ class App {
                     "/users/register",
                     "/users/activate",
                     "/staffs/auth",
-                    "/drivers/auth"
+                    "/drivers/auth",
+                    "/vehicles/preview",
+                    "/vehicles/cars",
+                    "/vehicles/motorbikes",
+                    "/vehicles/:brand-:model"
                 ]
             }
         ));
