@@ -18,7 +18,6 @@ export class UserController
         if(req.body.email == undefined || req.body.password == undefined)
             return next(createHttpError(400, "Email o password assenti"));
 
-
         Promise.resolve(userService.authUser(req.body.email, req.body.password)).then(function(value) {
 
             if(value.httpError == undefined)
@@ -27,7 +26,6 @@ export class UserController
                 });
             else
                 return next(createHttpError(value.httpError.code, value.httpError.message));
-
         });
     }
 

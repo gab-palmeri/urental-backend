@@ -11,26 +11,20 @@ export async function authUser(email:string, password:string): Promise<any> {
 
     const user = await getRepository(User).findOne({where:{'email': email}})
 
-    if(user.active == 1)
-        if(user != null && bcrypt.compareSync(password, user.password))
-        {
-            var privateKEY  = fs.readFileSync('./keys/private.key', 'utf8');
+    if(user == null || !bcrypt.compareSync(password, user.password))
+        return {httpError: {code:400, message:"Email o password invalidi"}, token: undefined};
 
-            var token = jwt.sign({
-                "id": user.id,
-                'role': 0
-            }, privateKEY, jwtSettings);
-
-            return {httpError: undefined, token: token};
-        }
-        else
-        {
-            return {httpError: {code:400, message:"Email o password invalidi"}, token: undefined};
-        }
-    else
-    {
+    if(user.active == 0)
         return {httpError: {code:401, message:"Utente non attivato. Controlla la mail"}, token: undefined};
-    }
+
+    var privateKEY  = fs.readFileSync('./keys/private.key', 'utf8');
+
+    var token = jwt.sign({
+        "id": user.id,
+        'role': 0
+    }, privateKEY, jwtSettings);
+
+    return {httpError: undefined, token: token};
 }
 
 export async function createUser(userPayload:any, hasDrivingLicense:boolean): Promise<any> {
@@ -67,7 +61,7 @@ export async function createUser(userPayload:any, hasDrivingLicense:boolean): Pr
     }
 }
 
-function sendActivationLink(userEmail:string) {
+async function sendActivationLink(userEmail:string) {
 
     Mailer.sendEmail(userEmail);
 
