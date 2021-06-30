@@ -24,7 +24,7 @@ export class Mailer
     static async sendEmail(userEmail: string)
     {
         var symmetricKey  = fs.readFileSync('./keys/symmetric.key', 'utf8');
-        var activationToken = CryptoJS.AES.encrypt(userEmail, symmetricKey).toString().replace('+','xMl3Jk').replace('/','Por21Ld').replace('=','Ml32');
+        var activationToken = CryptoJS.AES.encrypt(userEmail, symmetricKey).toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32');
 
         var mailOptions = {
             from: Mailer.user,
