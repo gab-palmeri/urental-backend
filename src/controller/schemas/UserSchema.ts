@@ -18,7 +18,7 @@ export const userSchema = Joi.object({
         }),
 
     surname: Joi.string()
-        .pattern(new RegExp('^[A-Z][a-z]+([ ][A-Z][a-z]+)*$'))
+        .pattern(new RegExp('^[A-Za-z]{2,}([ ][A-Za-z]{2,})*$'))
         .min(3)
         .max(20)
         .required()
@@ -31,10 +31,11 @@ export const userSchema = Joi.object({
         }),
 
     fiscalCode: Joi.string()
-        .alphanum()
+        .pattern(new RegExp('^(?:[A-Z][AEIOU][AEIOUX]|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$'))
         .length(16)
         .required()
         .messages({
+            'string.pattern.base': 'Il codice fiscale non è nel formato corretto',
             'string.length': 'Il codice fiscale deve essere composto da 16 caratteri',
             'string.empty': 'Il codice fiscale non può essere vuoto',
             'any.required': 'Il codice fiscale è obbligatorio'
@@ -51,7 +52,7 @@ export const userSchema = Joi.object({
         }),
 
     birthPlace: Joi.string()
-        .pattern(new RegExp('^[A-Z][a-z]{2,}([ ][A-Z][a-z]{2,})*$'))
+        .pattern(new RegExp('^[A-Za-z]{3,}([ ][A-Za-z]{3,})*$'))
         .min(3)
         .max(30)
         .required()
