@@ -5,7 +5,7 @@ import {createConnection} from "typeorm";
 import cors from "cors";
 import jwt from "express-jwt";
 import fs from 'fs';
-
+import { pathToRegexp } from 'path-to-regexp';
 
 class App {
 
@@ -72,7 +72,7 @@ class App {
                     "/vehicles/preview",
                     "/vehicles/cars",
                     "/vehicles/motorbikes",
-                    "/vehicles/:brand-:model"
+                    pathToRegexp("/vehicles/:brand-:model")
                 ]
             }
         ));
