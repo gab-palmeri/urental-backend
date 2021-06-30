@@ -1,16 +1,11 @@
 import { Request, Response } from 'express';
-import { getRepository } from "typeorm";
-import { jwtSettings } from '../jwtsettings';
 
 import createHttpError from 'http-errors';
 import CryptoJS from 'crypto-js';
 
-import * as bcrypt from 'bcryptjs';
 import * as fs from 'fs';
 import * as jwt from 'jsonwebtoken';
 
-import { User } from '../entity/User';
-import { DrivingLicense } from '../entity/DrivingLicense';
 import { userSchema } from "./schemas/UserSchema";
 import { drivingLicenseSchema } from "./schemas/DrivingLicenseSchema";
 

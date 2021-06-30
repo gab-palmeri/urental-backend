@@ -67,7 +67,7 @@ export async function createUser(userPayload:any, hasDrivingLicense:boolean): Pr
     }
 }
 
-export async function sendActivationLink(userEmail:string) {
+function sendActivationLink(userEmail:string) {
 
     Mailer.sendEmail(userEmail);
 
