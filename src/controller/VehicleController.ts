@@ -79,30 +79,6 @@ export class VehicleController
         }
     }
 
-    //ABBIAMO UN SOLO MODELLO, SERVE CHE BIKE E SCOOTER SIANO LEGATI A VEICOLO? DA SISTEMARE
-    // public async getBikes(req: Request, res: Response, next:any)
-    // {
-    //     try {
-    //         var bikes = await getRepository(Bike).find({relations: ['vehicle']});
-    //         res.status(200).send(bikes);
-    //
-    //     } catch (error) {
-    //         return next(createHttpError(500, "Errore interno al server."));
-    //     }
-    // }
-    //
-    // public async getScooters(req: Request, res: Response, next:any)
-    // {
-    //     try {
-    //         var scooters = await getRepository(Scooter).find({relations: ['vehicle']});
-    //
-    //         res.status(200).send(scooters);
-    //
-    //     } catch (error) {
-    //         return next(createHttpError(500, "Errore interno al server."));
-    //     }
-    // }
-
     //METODI PER I SINGOLI BRAND
     public async getVehicleOptions(req: Request, res: Response, next:any)
     {
