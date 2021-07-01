@@ -1,5 +1,4 @@
-node_modules
-.env
 keys
-assets/cars/**
-assets/motorbikes/**
+assets
+.env
+node_modules
