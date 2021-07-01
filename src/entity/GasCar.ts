@@ -20,13 +20,13 @@ export class GasCar {
     @Column({type: "tinyint"})
     seats: number;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     category: string;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     consumption: string;
 
-    @Column({type: "varchar", length:10})
+    @Column({type: "varchar", length:30})
     trunkSize: string;
 
     @Column({type: "bool"})
