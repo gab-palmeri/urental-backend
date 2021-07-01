@@ -12,7 +12,7 @@ export async function authUser(email:string, password:string): Promise<any> {
     const user = await getRepository(User).findOne({where:{'email': email}})
 
     if(user == null || !bcrypt.compareSync(password, user.password))
-        return {httpError: {code:400, message:"Email o password invalidi"}, token: undefined};
+        return {httpError: {code:400, message:"Email o password errati"}, token: undefined};
 
     if(user.active == 0)
         return {httpError: {code:401, message:"Utente non attivato. Controlla la mail"}, token: undefined};
@@ -31,25 +31,12 @@ export async function createUser(userPayload:any, hasDrivingLicense:boolean): Pr
 
     let user = new User();
 
-    //MODIFICA DEL PAYLOAD METTENDO LA MAIUSCOLA PER OGNI PAROLA (NOME,COGNOME,CITTà)
-    const nameArray = userPayload.name.toLowerCase().split(" ");
-    const surnameArray = userPayload.surname.toLowerCase().split(" ");
-
-    for (var i = 0; i < nameArray.length; i++)
-        nameArray[i] = nameArray[i].charAt(0).toUpperCase() + nameArray[i].slice(1);
-    for (var i = 0; i < surnameArray.length; i++)
-        surnameArray[i] = surnameArray[i].charAt(0).toUpperCase() + surnameArray[i].slice(1);
-
-    userPayload.name = nameArray.join(" ");
-    userPayload.surname = surnameArray.join(" ");
-    userPayload.birthPlace = userPayload.birthPlace.charAt(0).toUpperCase() + userPayload.birthPlace.slice(1).toLowerCase()
-
     //INSERIMENTO DATI PRINCIPALI
-    user.name = userPayload.name;
-    user.surname = userPayload.surname;
+    user.name = converToCapitalizedCase(userPayload.name);
+    user.surname = converToCapitalizedCase(userPayload.surname);
     user.fiscalCode = userPayload.fiscalCode;
     user.birthDate = userPayload.birthDate;
-    user.birthPlace = userPayload.birthPlace;
+    user.birthPlace = converToCapitalizedCase(userPayload.birthPlace);
     user.email = userPayload.email;
     user.password = bcrypt.hashSync(userPayload.password, 8);
     user.active = 0;
@@ -112,5 +99,19 @@ export async function changePin(userId:number, newPin:string): Promise<any> {
     } catch (error) {
         return {code:500, message:"Errore interno al server"};
     }
+
+}
+
+function converToCapitalizedCase(words: string): string {
+	
+
+	const wordsArray = words.toLowerCase().split(" ");
+
+
+    for (var i = 0; i < wordsArray.length; i++)
+        wordsArray[i] = wordsArray[i].charAt(0).toUpperCase() + wordsArray[i].slice(1);
+
+
+    return wordsArray.join(" ");
 
 }
