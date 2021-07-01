@@ -6,14 +6,12 @@
         "esModuleInterop": true,
         "pretty": true,
         "target": "es2021",
-        "outDir": "./dist",
         "baseUrl": "./src",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
     },
     "include": [
         "./src/**/*.ts",
-        "./migration/*.ts"
     ],
     "exclude": [
         "node_modules"
