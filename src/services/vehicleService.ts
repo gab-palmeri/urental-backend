@@ -1,11 +1,5 @@
 import { getRepository, In } from "typeorm";
 import { Vehicle } from '../entity/Vehicle';
-import { GasCar } from '../entity/GasCar';
-import { ElectricCar } from '../entity/ElectricCar';
-import { GasMotorbike } from '../entity/GasMotorbike';
-import { ElectricMotorbike } from '../entity/ElectricMotorbike';
-import { Bike } from '../entity/Bike';
-import { Scooter } from '../entity/Scooter';
 
 export async function getPreview(): Promise<any> {
 
@@ -74,12 +68,14 @@ export async function getVehiclesByBrandAndModel(brand: string, model: string): 
     try {
         var vehicles = await getRepository(Vehicle).find({ where: { brand: brand, model: model } });
 
-        return {httpError: undefined, vehiclesData: vehicles}
+        if(vehicles.length == 0)
+            return {httpError: {code: 404, message : "Non esiste nessun veicolo con il brand e model specificati"}, vehiclesData: undefined};
 
+        return {httpError: undefined, vehiclesData: vehicles}
     } catch (error) {
+
         return {httpError: {code:500, message:"Errore interno al server"}, vehiclesData: undefined}
     }
-
 }
 
 function removeDuplicateVehicles(vehicles: Vehicle[])

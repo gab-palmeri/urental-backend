@@ -43,14 +43,18 @@ export class VehicleController
     }
 
     //METODI PER I SINGOLI BRAND
-    public async getVehicleOptions(req: Request, res: Response, next:any)
-    {
+    public async getVehicleOptions(req: Request, res: Response, next:any){
         Promise.resolve(vehicleService.getVehiclesByBrandAndModel(req.params.brand, req.params.model)).then(async function(value) {
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
 
-            var results: Vehicle[] = await Promise.all(value.vehiclesData.map(async (vehicle:Vehicle) => {
+            let vehiclesResponse = {};
+            vehiclesResponse["brand"] = req.params.brand;
+            vehiclesResponse["model"] = req.params.model;
+            vehiclesResponse["engines"] = [];
+
+            let vehicles : Vehicle[] = await Promise.all(value.vehiclesData.map(async (vehicle:Vehicle) => {
                 switch (vehicle.type) {
                     case 0:
                         await vehicle.gasCar;
@@ -76,9 +80,78 @@ export class VehicleController
                 return vehicle;
             }));
 
-            res.status(200).send(results);
-        });
+            await vehicles.forEach((vehicle) => {
 
+                let engine = {};
+
+                switch (vehicle.type){
+                    case 0:
+                        vehicle.gasCar.then(function(gasCar){
+
+                            let engine = JSON.parse(JSON.stringify(gasCar));
+                            engine["main_image"] = vehicle.main_image;
+                            delete engine.id, engine.licensePlate;
+
+                            vehiclesResponse["engines"].push(engine);
+                        });
+                        break;
+                    case 1:
+                        vehicle.electricCar.then(function(eletricCar){
+
+                            let engine = JSON.parse(JSON.stringify(eletricCar));
+                            engine["main_image"] = vehicle.main_image;
+                            delete engine.id, engine.licensePlate;
+
+                            vehiclesResponse["engines"].push(engine);
+                        });
+                        break;
+                    case 2:
+                        vehicle.gasMotorbike.then(function(gasMotorbike){
+
+                            let engine = JSON.parse(JSON.stringify(gasMotorbike));
+                            engine["main_image"] = vehicle.main_image;
+                            delete engine.id, engine.licensePlate;
+
+                            vehiclesResponse["engines"].push(engine);
+                        });
+                        break;
+                    case 3:
+                        vehicle.electricMotorbike.then(function(electricMotorbike){
+
+                            let engine = JSON.parse(JSON.stringify(electricMotorbike));
+                            engine["main_image"] = vehicle.main_image;
+                            delete engine.id, engine.licensePlate;
+
+                            vehiclesResponse["engines"].push(engine);
+                        });
+                        break;
+                    case 4:
+                        vehicle.bike.then(function(bike){
+
+                            let engine = JSON.parse(JSON.stringify(bike));
+                            engine["main_image"] = vehicle.main_image;
+                            delete engine.id;
+
+                            vehiclesResponse["engines"].push(engine);
+                        });
+                        break;
+                    case 5:
+                        vehicle.scooter.then(function(scooter){
+
+                            let engine = JSON.parse(JSON.stringify(scooter));
+                            engine["main_image"] = vehicle.main_image;
+                            delete engine.id
+
+                            vehiclesResponse["engines"].push(engine);
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            res.status(200).send(vehiclesResponse);
+        });
     }
 
 }
