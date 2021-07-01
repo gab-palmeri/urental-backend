@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import createHttpError from "http-errors";
 
-import { staffAndDriverSchema as DriverSchema} from "./schemas/StaffAndDriverSchema";
+import { staffAndDriverSchema as DriverSchema} from "../schemas/StaffAndDriverSchema";
 
 import * as driverService from "../services/driverService";
 

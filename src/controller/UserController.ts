@@ -6,8 +6,8 @@ import CryptoJS from 'crypto-js';
 import * as fs from 'fs';
 import * as jwt from 'jsonwebtoken';
 
-import { userSchema } from "./schemas/UserSchema";
-import { drivingLicenseSchema } from "./schemas/DrivingLicenseSchema";
+import { userSchema } from "../schemas/UserSchema";
+import { drivingLicenseSchema } from "../schemas/DrivingLicenseSchema";
 
 import * as userService from '../services/userService';
 
