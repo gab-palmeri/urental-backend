@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, In } from "typeorm";
 import { Vehicle } from '../entity/Vehicle';
 import { GasCar } from '../entity/GasCar';
 import { ElectricCar } from '../entity/ElectricCar';
@@ -7,22 +7,23 @@ import { ElectricMotorbike } from '../entity/ElectricMotorbike';
 import { Bike } from '../entity/Bike';
 import { Scooter } from '../entity/Scooter';
 
-
 export async function getPreview(): Promise<any> {
 
     try {
-        const vehicles = await getRepository(Vehicle).createQueryBuilder("vehicle")
-            .select(['brand', 'model','type', 'imgUrl'])
-            .groupBy("vehicle.brand")
-            .addGroupBy("vehicle.model")
-            .getRawMany();
 
-        const cars = vehicles.filter(vehicle => vehicle.type >= 0 && vehicle.type <= 1);
-        const motorbikes = vehicles.filter(vehicle => vehicle.type >= 2 && vehicle.type <= 3);
+        const vehicles = await getRepository(Vehicle).find({
+            select: ["brand","model","type","main_image"]
+        });
 
-        //We will have one brand/model for bikes and one brand/model for scooters
-        const bike = vehicles.filter(vehicle => vehicle.type == 4);
-        const scooter = vehicles.filter(vehicle => vehicle.type == 5);
+        var noDuplicatesVehicles = await removeDuplicateVehicles(vehicles);
+
+        //Dividing the query result into 4 sections (cars,motorbikes,bike,scooter)
+        const cars = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 0 && vehicle.type <= 1);
+        const motorbikes = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 2 && vehicle.type <= 3);
+
+        //We will have one brand/model for bikes and one brand/model for scooters => one item each
+        const bike = noDuplicatesVehicles.filter(vehicle => vehicle.type == 4);
+        const scooter = noDuplicatesVehicles.filter(vehicle => vehicle.type == 5);
 
         return {httpError: undefined, vehiclesData: [cars,motorbikes,bike,scooter]}
 
@@ -36,15 +37,14 @@ export async function getCars(): Promise<any> {
 
     try {
 
-        const cars = await getRepository(Vehicle).createQueryBuilder("vehicle")
-            .select(['brand', 'model', 'imgUrl'])
-            .where("vehicle.type >= 0")
-            .andWhere("vehicle.type <= 1")
-            .groupBy("vehicle.brand")
-            .addGroupBy("vehicle.model")
-            .getRawMany();
+        const cars = await getRepository(Vehicle).find({
+            select: ["brand","model","main_image"],
+            where: { type: In([0,1])}
+        });
 
-        return {httpError: undefined, carsData: cars}
+        var noDuplicatesCars = await removeDuplicateVehicles(cars);
+
+        return {httpError: undefined, carsData: noDuplicatesCars}
 
     } catch (err) {
         return {httpError: {code:500, message:"Errore interno al server"}, carsData: undefined}
@@ -53,15 +53,15 @@ export async function getCars(): Promise<any> {
 
 export async function getMotorbikes(): Promise<any> {
     try {
-        const motorbikes = await getRepository(Vehicle).createQueryBuilder("vehicle")
-            .select(['brand', 'model', 'imgUrl'])
-            .where("vehicle.type >= 2")
-            .andWhere("vehicle.type <= 3")
-            .groupBy("vehicle.brand")
-            .addGroupBy("vehicle.model")
-            .getRawMany();
 
-        return {httpError: undefined, motorbikesData: motorbikes}
+        const motorbikes = await getRepository(Vehicle).find({
+            select: ["brand","model","main_image"],
+            where: { type: In([2,3])}
+        });
+
+        var noDuplicatesMotorbikes = await removeDuplicateVehicles(motorbikes);
+
+        return {httpError: undefined, motorbikesData: noDuplicatesMotorbikes}
 
     } catch (error) {
         return {httpError: {code:500, message:"Errore interno al server"}, motorbikesData: undefined}
@@ -80,5 +80,17 @@ export async function getVehiclesByBrandAndModel(brand: string, model: string): 
         return {httpError: {code:500, message:"Errore interno al server"}, vehiclesData: undefined}
     }
 
+}
 
+async function removeDuplicateVehicles(vehicles: Vehicle[])
+{
+    var hashesFound = {};
+
+    vehicles.forEach(function(vehicle){
+        hashesFound[vehicle.brand + "-" + vehicle.model] = vehicle;
+    })
+
+    return Object.keys(hashesFound).map(function(k){
+        return hashesFound[k];
+    })
 }

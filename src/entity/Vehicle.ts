@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany } from "typeorm";
 
 import { GasCar } from './GasCar';
 import { ElectricCar } from './ElectricCar';
@@ -6,6 +6,8 @@ import { GasMotorbike } from './GasMotorbike';
 import { ElectricMotorbike } from './ElectricMotorbike';
 import { Bike } from './Bike';
 import { Scooter } from './Scooter';
+
+import { VehiclePhoto } from './VehiclePhoto';
 
 @Entity()
 export class Vehicle {
@@ -26,7 +28,10 @@ export class Vehicle {
     type: number;
 
     @Column({type: "varchar", length:32})
-    imgUrl: string;
+    main_image: string;
+
+    @OneToMany(() => VehiclePhoto, photo => photo.vehicle)
+    photos: VehiclePhoto[];
 
     //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
     @OneToOne(() => GasCar, gasCar => gasCar.vehicle)
