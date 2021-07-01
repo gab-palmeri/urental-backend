@@ -14,19 +14,19 @@ export class ElectricMotorbike {
     @Column({type: "smallint"})
     capacity: number;
 
-    @Column({type: "smallint"})
+    @Column({type: "float"})
     kilowatt: number;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     category: string;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     consumption: string;
 
-    @Column({type: "varchar", length:10})
+    @Column({type: "varchar", length:30})
     batteryCapacity: string;
 
-    @Column({type: "varchar", length:3})
+    @Column({type: "varchar", length:10})
     chargeDuration: string;
 
     @OneToOne(() => Vehicle, vehicle => vehicle.electricMotorbike)

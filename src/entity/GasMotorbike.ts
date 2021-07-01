@@ -14,13 +14,13 @@ export class GasMotorbike {
     @Column({type: "smallint"})
     capacity: number;
 
-    @Column({type: "smallint"})
+    @Column({type: "float"})
     kilowatt: number;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     category: string;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     consumption: string;
 
     @Column({type: "bool"})

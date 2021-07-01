@@ -14,7 +14,7 @@ export class GasCar {
     @Column({type: "smallint"})
     displacement: number;
 
-    @Column({type: "smallint"})
+    @Column({type: "float"})
     kilowatt: number;
 
     @Column({type: "tinyint"})
