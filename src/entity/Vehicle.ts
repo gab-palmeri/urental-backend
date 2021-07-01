@@ -27,6 +27,9 @@ export class Vehicle {
     @Column({type: "tinyint"})
     type: number;
 
+    @Column({type: "varchar", length:32})
+    main_image: string;
+
     @OneToMany(() => VehiclePhoto, photo => photo.vehicle)
     photos: VehiclePhoto[];
 

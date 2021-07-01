@@ -7,15 +7,12 @@ import { ElectricMotorbike } from '../entity/ElectricMotorbike';
 import { Bike } from '../entity/Bike';
 import { Scooter } from '../entity/Scooter';
 
-
-
 export async function getPreview(): Promise<any> {
 
     try {
 
         const vehicles = await getRepository(Vehicle).find({
-            select: ["brand","model","type"],
-            relations:['photos']
+            select: ["brand","model","type","main_image"]
         });
 
         var noDuplicatesVehicles = await removeDuplicateVehicles(vehicles);
@@ -41,8 +38,7 @@ export async function getCars(): Promise<any> {
     try {
 
         const cars = await getRepository(Vehicle).find({
-            select: ["brand","model"],
-            relations:['photos'],
+            select: ["brand","model","main_image"],
             where: { type: In([0,1])}
         });
 
@@ -59,8 +55,7 @@ export async function getMotorbikes(): Promise<any> {
     try {
 
         const motorbikes = await getRepository(Vehicle).find({
-            select: ["brand","model"],
-            relations:['photos'],
+            select: ["brand","model","main_image"],
             where: { type: In([2,3])}
         });
 
