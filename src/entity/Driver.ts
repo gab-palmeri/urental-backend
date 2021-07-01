@@ -1,4 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, OneToMany} from "typeorm";
+
+import { Booking } from "./Booking";
 
 @Entity()
 
@@ -27,4 +29,7 @@ export class Driver{
 
     @Column({type: "text", nullable: false})
     password: string;
+
+	@OneToMany(() => Booking, booking => booking.driver)
+    bookings: Booking[];
 }
