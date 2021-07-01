@@ -8,6 +8,7 @@ import { Bike } from './Bike';
 import { Scooter } from './Scooter';
 
 import { VehiclePhoto } from './VehiclePhoto';
+import { Booking } from './Booking';
 
 @Entity()
 export class Vehicle {
@@ -32,6 +33,9 @@ export class Vehicle {
 
     @OneToMany(() => VehiclePhoto, photo => photo.vehicle)
     photos: VehiclePhoto[];
+
+	@OneToMany(() => Booking, booking => booking.vehicle)
+    bookings: Booking[];
 
     //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
     @OneToOne(() => GasCar, gasCar => gasCar.vehicle)
