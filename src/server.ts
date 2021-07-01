@@ -1,6 +1,6 @@
 import app from "./app";
 
-const port = process.env.PORT || 7850
+const port = process.env.SERVER_PORT || 7850
 
 try {
     app.listen(port, (): void => {
