@@ -15,7 +15,7 @@ export async function getPreview(): Promise<any> {
             select: ["brand","model","type","main_image"]
         });
 
-        var noDuplicatesVehicles = await removeDuplicateVehicles(vehicles);
+        var noDuplicatesVehicles = removeDuplicateVehicles(vehicles);
 
         //Dividing the query result into 4 sections (cars,motorbikes,bike,scooter)
         const cars = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 0 && vehicle.type <= 1);
@@ -25,7 +25,7 @@ export async function getPreview(): Promise<any> {
         const bike = noDuplicatesVehicles.filter(vehicle => vehicle.type == 4);
         const scooter = noDuplicatesVehicles.filter(vehicle => vehicle.type == 5);
 
-        return {httpError: undefined, vehiclesData: [cars,motorbikes,bike,scooter]}
+        return {httpError: undefined, vehiclesData: {cars: cars, motorbikes: motorbikes, bike: bike, scooter: scooter}}
 
     } catch(err)
     {
@@ -42,7 +42,7 @@ export async function getCars(): Promise<any> {
             where: { type: In([0,1])}
         });
 
-        var noDuplicatesCars = await removeDuplicateVehicles(cars);
+        var noDuplicatesCars = removeDuplicateVehicles(cars);
 
         return {httpError: undefined, carsData: noDuplicatesCars}
 
@@ -59,7 +59,7 @@ export async function getMotorbikes(): Promise<any> {
             where: { type: In([2,3])}
         });
 
-        var noDuplicatesMotorbikes = await removeDuplicateVehicles(motorbikes);
+        var noDuplicatesMotorbikes = removeDuplicateVehicles(motorbikes);
 
         return {httpError: undefined, motorbikesData: noDuplicatesMotorbikes}
 
@@ -82,7 +82,7 @@ export async function getVehiclesByBrandAndModel(brand: string, model: string): 
 
 }
 
-async function removeDuplicateVehicles(vehicles: Vehicle[])
+function removeDuplicateVehicles(vehicles: Vehicle[])
 {
     var hashesFound = {};
 
