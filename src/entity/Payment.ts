@@ -8,8 +8,11 @@ export class Payment {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: "varchar", length:10})
-    price: number;
+    @Column({type: "float"})
+    total: number;
+
+	@Column({type: "varchar", length:10})
+    paymentCode: string;
 
     @OneToOne(() => Booking, booking => booking.payment)
     @JoinColumn()
