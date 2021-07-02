@@ -23,7 +23,7 @@ export class GasMotorbike {
     @Column({type: "varchar", length:30})
     consumption: string;
 
-    @Column({type: "bool"})
+    @Column({type: "boolean"})
     shift: boolean;
 
     @Column({type: "tinyint"})

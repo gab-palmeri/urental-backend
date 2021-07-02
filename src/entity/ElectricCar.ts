@@ -11,9 +11,6 @@ export class ElectricCar {
     @Column({type: "varchar",length: 20, unique:true})
     licensePlate: string;
 
-    @Column({type: "smallint"})
-    displacement: number;
-
     @Column({type: "float"})
     kilowatt: number;
 

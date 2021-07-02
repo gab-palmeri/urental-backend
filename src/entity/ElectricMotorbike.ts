@@ -11,9 +11,6 @@ export class ElectricMotorbike {
     @Column({type: "varchar",length: 20, unique:true})
     licensePlate: string;
 
-    @Column({type: "smallint"})
-    capacity: number;
-
     @Column({type: "float"})
     kilowatt: number;
 

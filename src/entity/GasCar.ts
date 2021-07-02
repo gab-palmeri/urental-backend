@@ -29,7 +29,7 @@ export class GasCar {
     @Column({type: "varchar", length:30})
     trunkSize: string;
 
-    @Column({type: "bool"})
+    @Column({type: "boolean"})
     shift: boolean;
 
     @Column({type: "tinyint"})
