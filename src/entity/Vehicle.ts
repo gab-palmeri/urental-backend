@@ -30,7 +30,7 @@ export class Vehicle {
     @Column({type: "varchar", length:32})
     main_image: string;
 
-    @OneToMany(() => VehiclePhoto, photo => photo.vehicle)
+    @OneToMany(() => VehiclePhoto, photo => photo.vehicle, {cascade : true})
     photos: VehiclePhoto[];
 
     //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
