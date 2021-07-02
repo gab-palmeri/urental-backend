@@ -34,22 +34,22 @@ export class Vehicle {
     photos: VehiclePhoto[];
 
     //RELAZIONI ESCLUSIVE: SOLO UNA DI ESSE SARà NOT NULL
-    @OneToOne(() => GasCar, gasCar => gasCar.vehicle)
+    @OneToOne(() => GasCar, gasCar => gasCar.vehicle, {cascade : true})
     gasCar: Promise<GasCar>;
 
-    @OneToOne(() => ElectricCar, electricCar => electricCar.vehicle)
+    @OneToOne(() => ElectricCar, electricCar => electricCar.vehicle, {cascade : true})
     electricCar: Promise<ElectricCar>;
 
-    @OneToOne(() => GasMotorbike, gasMotorbike => gasMotorbike.vehicle)
+    @OneToOne(() => GasMotorbike, gasMotorbike => gasMotorbike.vehicle, {cascade : true})
     gasMotorbike: Promise<GasMotorbike>;
 
-    @OneToOne(() => ElectricMotorbike, electricMotorbike => electricMotorbike.vehicle)
+    @OneToOne(() => ElectricMotorbike, electricMotorbike => electricMotorbike.vehicle, {cascade : true})
     electricMotorbike: Promise<ElectricMotorbike>;
 
-    @OneToOne(() => Bike, bike => bike.vehicle)
+    @OneToOne(() => Bike, bike => bike.vehicle, {cascade : true})
     bike: Promise<Bike>;
 
-    @OneToOne(() => Scooter, scooter => scooter.vehicle)
+    @OneToOne(() => Scooter, scooter => scooter.vehicle, {cascade : true})
     scooter: Promise<Scooter>;
 
 }
