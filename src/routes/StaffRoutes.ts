@@ -11,5 +11,11 @@ export class StaffRoutes{
 
         app.route("/staffs/register")
             .post(this.staffController.create)
+
+        app.route("/staffs/createDriver")
+            .post(this.staffController.createDriver)
+
+        app.route("/staffs/addNewVehicle")
+            .post(this.staffController.addNewVehicle);
     }
 }

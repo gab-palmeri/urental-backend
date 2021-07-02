@@ -8,8 +8,5 @@ export class DriverRoutes{
 
         app.route("/drivers/auth")
             .post(this.staffController.auth)
-
-        app.route("/drivers/register")
-            .post(this.staffController.create)
     }
 }

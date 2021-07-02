@@ -6,6 +6,13 @@ import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 
 import {Staff} from "../entity/Staff";
+import {Vehicle} from "../entity/Vehicle";
+import {GasCar} from "../entity/GasCar";
+import {ElectricCar} from "../entity/ElectricCar";
+import {GasMotorbike} from "../entity/GasMotorbike";
+import {ElectricMotorbike} from "../entity/ElectricMotorbike";
+import {Bike} from "../entity/Bike";
+import {Scooter} from "../entity/Scooter";
 
 export async function authStaff(email: string, password: string) : Promise<any>{
 
@@ -63,6 +70,96 @@ function verifyRoleFromToken(token: any) : object{
 
     if(decodedToken["role"] != 2)
         return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
+
+    return undefined;
+}
+
+export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
+
+    const token = addNewVehiclePayload.headers.authorization.split(" ")[1];
+    let httpError = verifyRoleFromToken(token);
+
+    if(httpError != undefined)
+        return httpError;
+
+    let vehicle = new Vehicle();
+    vehicle.brand = addNewVehiclePayload.body.brand;
+    vehicle.model = addNewVehiclePayload.body.model;
+    vehicle.serialNumber = addNewVehiclePayload.body.serialNumber;
+    vehicle.type = addNewVehiclePayload.body.type;
+    vehicle.main_image = addNewVehiclePayload.body.main_image;
+
+    switch (vehicle.type) {
+        case 0:
+
+            let gasCar = new GasCar();
+
+            Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
+                gasCar[key] = addNewVehiclePayload.body.features[key];
+            });
+
+            vehicle.gasCar = Promise.resolve(gasCar);
+            break;
+        case 1:
+
+            let electricCar = new ElectricCar();
+
+            Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
+                electricCar[key] = addNewVehiclePayload.body.features[key];
+            });
+
+            vehicle.electricCar = Promise.resolve(electricCar);
+            break;
+        case 2:
+            let gasMotorbike = new GasMotorbike();
+
+            Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
+                gasMotorbike[key] = addNewVehiclePayload.body.features[key];
+            });
+
+            vehicle.gasMotorbike = Promise.resolve(gasMotorbike);
+            break;
+        case 3:
+            let electricMotorbike = new ElectricMotorbike();
+
+            Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
+                electricMotorbike[key] = addNewVehiclePayload.body.features[key];
+            });
+
+            vehicle.electricMotorbike = Promise.resolve(electricMotorbike);
+            break;
+        case 4:
+            let bike = new Bike();
+
+            Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
+                bike[key] = addNewVehiclePayload.body.features[key];
+            });
+
+            vehicle.bike = Promise.resolve(bike);
+            break;
+        case 5:
+            let scooter = new Scooter();
+
+            Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
+                scooter[key] = addNewVehiclePayload.body.features[key];
+            });
+
+            vehicle.scooter = Promise.resolve(scooter);
+            break;
+        default:
+            break;
+    }
+
+    try{
+        await getRepository(Vehicle).save(vehicle);
+    }
+    catch(err){
+
+        if(err.code == "ER_DUP_ENTRY")
+            return {code: 400, message: "Vehicle già esistente."};
+        else
+            return {code: 500, message: "Errore interno al server"};
+    }
 
     return undefined;
 }
