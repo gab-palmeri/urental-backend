@@ -52,6 +52,7 @@ export class VehicleController
             let vehiclesResponse = {};
             vehiclesResponse["brand"] = req.params.brand;
             vehiclesResponse["model"] = req.params.model;
+            vehiclesResponse["type"] = "";
             vehiclesResponse["engines"] = [];
 
             let vehicles : Vehicle[] = await Promise.all(value.vehiclesData.map(async (vehicle:Vehicle) => {
@@ -90,8 +91,18 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(gasCar));
                             engine["main_image"] = vehicle.main_image;
-                            delete engine.id, engine.licensePlate;
+                            vehiclesResponse["type"] = "car";
 
+                            delete engine.id;
+                            delete engine.licensePlate;
+
+                            engine["photos"] = [];
+                            vehicle.photos.forEach(function(vehiclePhoto){
+
+                                let photo = {};
+                                photo["imgUrl"] = vehiclePhoto.imgUrl;
+                                engine["photos"].push(photo);
+                            });
                             vehiclesResponse["engines"].push(engine);
                         });
                         break;
@@ -100,8 +111,18 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(eletricCar));
                             engine["main_image"] = vehicle.main_image;
-                            delete engine.id, engine.licensePlate;
+                            vehiclesResponse["type"] = "car";
 
+                            delete engine.id;
+                            delete engine.licensePlate;
+
+                            engine["photos"] = [];
+                            vehicle.photos.forEach(function(vehiclePhoto){
+
+                                let photo = {};
+                                photo["imgUrl"] = vehiclePhoto.imgUrl;
+                                engine["photos"].push(photo);
+                            });
                             vehiclesResponse["engines"].push(engine);
                         });
                         break;
@@ -110,8 +131,18 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(gasMotorbike));
                             engine["main_image"] = vehicle.main_image;
-                            delete engine.id, engine.licensePlate;
+                            vehiclesResponse["type"] = "motorbike";
 
+                            delete engine.id;
+                            delete engine.licensePlate;
+
+                            engine["photos"] = [];
+                            vehicle.photos.forEach(function(vehiclePhoto){
+
+                                let photo = {};
+                                photo["imgUrl"] = vehiclePhoto.imgUrl;
+                                engine["photos"].push(photo);
+                            });
                             vehiclesResponse["engines"].push(engine);
                         });
                         break;
@@ -120,8 +151,18 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(electricMotorbike));
                             engine["main_image"] = vehicle.main_image;
-                            delete engine.id, engine.licensePlate;
+                            vehiclesResponse["type"] = "motorbike";
 
+                            delete engine.id;
+                            delete engine.licensePlate;
+
+                            engine["photos"] = [];
+                            vehicle.photos.forEach(function(vehiclePhoto){
+
+                                let photo = {};
+                                photo["imgUrl"] = vehiclePhoto.imgUrl;
+                                engine["photos"].push(photo);
+                            });
                             vehiclesResponse["engines"].push(engine);
                         });
                         break;
@@ -130,8 +171,17 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(bike));
                             engine["main_image"] = vehicle.main_image;
+                            vehiclesResponse["type"] = "bike";
+
                             delete engine.id;
 
+                            engine["photos"] = [];
+                            vehicle.photos.forEach(function(vehiclePhoto){
+
+                                let photo = {};
+                                photo["imgUrl"] = vehiclePhoto.imgUrl;
+                                engine["photos"].push(photo);
+                            });
                             vehiclesResponse["engines"].push(engine);
                         });
                         break;
@@ -140,8 +190,17 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(scooter));
                             engine["main_image"] = vehicle.main_image;
-                            delete engine.id
+                            vehiclesResponse["type"] = "scooter";
 
+                            delete engine.id;
+
+                            engine["photos"] = [];
+                            vehicle.photos.forEach(function(vehiclePhoto){
+
+                                let photo = {};
+                                photo["imgUrl"] = vehiclePhoto.imgUrl;
+                                engine["photos"].push(photo);
+                            });
                             vehiclesResponse["engines"].push(engine);
                         });
                         break;

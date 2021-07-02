@@ -66,7 +66,7 @@ export async function getMotorbikes(): Promise<any> {
 export async function getVehiclesByBrandAndModel(brand: string, model: string): Promise<any> {
 
     try {
-        var vehicles = await getRepository(Vehicle).find({ where: { brand: brand, model: model } });
+        var vehicles = await getRepository(Vehicle).find({ where: { brand: brand, model: model }, relations: ["photos"] });
 
         if(vehicles.length == 0)
             return {httpError: {code: 404, message : "Non esiste nessun veicolo con il brand e model specificati"}, vehiclesData: undefined};
