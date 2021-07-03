@@ -7,8 +7,8 @@
   "scripts": {
     "start": "ts-node ./src/server.ts",
     "start-prod": "ts-node --transpile-only ./src/server.ts",
-	"migration:generate": "ts-node node_modules\\typeorm\\cli.js migration:generate -n",
-	"migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run"
+    "migration:generate": "ts-node node_modules\\typeorm\\cli.js migration:generate -n",
+    "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
     "dotenv": "^8.6.0",
+    "dotenv-parse-variables": "^2.0.0",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "http-errors": "^1.7.2",
