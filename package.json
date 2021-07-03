@@ -7,7 +7,7 @@
   "scripts": {
     "start": "ts-node ./src/server.ts",
     "start-prod": "ts-node --transpile-only ./src/server.ts",
-    "migration:generate": "ts-node ./node_modules/.bin/typeorm migrations:generate -n",
+    "migration:generate": "ts-node ./node_modules/.bin/typeorm migration:generate -n",
     "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run"
   },
   "author": "",
