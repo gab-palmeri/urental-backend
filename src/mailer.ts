@@ -6,20 +6,27 @@ import * as fs from 'fs';
 
 export class Mailer
 {
-    private static user = process.env.MAILER_ADDRESS;
-    private static pass = process.env.MAILER_PASS;
+    private static user: string;
+    private static pass: string;
+    private static transporter: Mail;
 
-    private static transporter: Mail = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        service: 'gmail',
-        auth: {
-            user: Mailer.user,
-            pass: Mailer.pass,
-        },
-    });
+	static init()
+	{
+		Mailer.user = process.env.MAILER_ADDRESS;
+		Mailer.pass = process.env.MAILER_PASS;
+
+		Mailer.transporter = nodemailer.createTransport({
+			host: 'smtp.gmail.com',
+			port: 587,
+			secure: true,
+			requireTLS: true,
+			service: 'gmail',
+			auth: {
+				user: Mailer.user,
+				pass: Mailer.pass,
+			},
+    	});
+	}
 
     static async sendEmail(userEmail: string)
     {
