@@ -6,8 +6,8 @@ import * as fs from 'fs';
 
 export class Mailer
 {
-    private static user = "urental.mailer@gmail.com";
-    private static pass = "dsffckkjrujjyjuw";
+    private static user = process.env.MAILER_ADDRESS;
+    private static pass = process.env.MAILER_PASS;
 
     private static transporter: Mail = nodemailer.createTransport({
         host: 'smtp.gmail.com',
