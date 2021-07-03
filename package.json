@@ -6,7 +6,9 @@
   "main": "./dist/server.js",
   "scripts": {
     "start": "ts-node ./src/server.ts",
-    "start-prod": "ts-node --transpile-only ./src/server.ts"
+    "start-prod": "ts-node --transpile-only ./src/server.ts",
+	"migration:generate": "ts-node node_modules\\typeorm\\cli.js migration:generate -n",
+	"migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run"
   },
   "author": "",
   "license": "ISC",
