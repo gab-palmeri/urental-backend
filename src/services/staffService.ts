@@ -13,6 +13,7 @@ import {GasMotorbike} from "../entity/GasMotorbike";
 import {ElectricMotorbike} from "../entity/ElectricMotorbike";
 import {Bike} from "../entity/Bike";
 import {Scooter} from "../entity/Scooter";
+import {VehiclePhoto} from "../entity/VehiclePhoto";
 
 export async function authStaff(email: string, password: string) : Promise<any>{
 
@@ -88,6 +89,12 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
     vehicle.serialNumber = addNewVehiclePayload.body.serialNumber;
     vehicle.type = addNewVehiclePayload.body.type;
     vehicle.main_image = addNewVehiclePayload.body.main_image;
+
+    vehicle.photos = addNewVehiclePayload.body.photos.map((photoURL : string) => {
+        let vehiclePhoto = new VehiclePhoto();
+        vehiclePhoto.imgUrl = photoURL;
+        return vehiclePhoto;
+    });
 
     switch (vehicle.type) {
         case 0:
