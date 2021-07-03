@@ -5,7 +5,7 @@ module.exports = {
 	"database": process.env.DB_NAME || "appwebandmobile",
 	"username": process.env.DB_USER || "root",
 	"password": process.env.DB_PASS || "",
-	"synchronize": process.env.DB_SYNC || true,
+	"synchronize": (process.env.DB_SYNC == 'true'),
 	"logging": false,
 	"entities": [
 		"src/entity/*.ts"
