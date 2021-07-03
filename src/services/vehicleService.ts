@@ -6,7 +6,7 @@ export async function getPreview(): Promise<any> {
     try {
 
         const vehicles = await getRepository(Vehicle).find({
-            select: ["brand","model","type","main_image"]
+            select: ["brand","model","type","mainImage"]
         });
 
         var noDuplicatesVehicles = removeDuplicateVehicles(vehicles);
@@ -32,7 +32,7 @@ export async function getCars(): Promise<any> {
     try {
 
         const cars = await getRepository(Vehicle).find({
-            select: ["brand","model","main_image"],
+            select: ["brand","model","mainImage"],
             where: { type: In([0,1])}
         });
 
@@ -49,7 +49,7 @@ export async function getMotorbikes(): Promise<any> {
     try {
 
         const motorbikes = await getRepository(Vehicle).find({
-            select: ["brand","model","main_image"],
+            select: ["brand","model","mainImage"],
             where: { type: In([2,3])}
         });
 

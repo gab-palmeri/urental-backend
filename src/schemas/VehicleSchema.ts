@@ -39,25 +39,13 @@ export const vehicleSchema = Joi.object({
         }),
 
 
-    main_image: Joi.string()
-        .max(32)
+    mainImage: Joi.string()
         .required()
         .messages({
-            "string.max" : "Il main_image non può eccedere i 32 caratteri",
             "any.required" : "Il main_image è obbligatorio"
         }),
 
-    /*photos: Joi.array().items(
-        Joi.object().keys({
-            imageUrl: Joi.string()
-                .max(32)
-                .required()
-                .messages({
-                    "string.max" : "L'imageUrl non può eccedere i 32 caratteri",
-                    "any.required" : "L'imageUrl è obbligatorio"
-                }),
-        })
-    )*/
+
     photos: Joi.array()
         .items(
             Joi.string()
