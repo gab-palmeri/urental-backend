@@ -6,11 +6,11 @@
     
 <br/>
 
-## Encryption keys
+## Keys folder
 
   1. Generate a pair of public/private keys. Name them *private.key* and *public.key*
   2. Generate a symmetric key. Name it *symmetric.key*
-  3. Create a *key* folder and put the 3 keys in it
+  3. Put these 3 files in the *keys* folder
   
 <br/>
 
@@ -22,7 +22,7 @@
 
 ## Creating the .env file
 
-Create a file in the root folder with this structure:
+Create a .env file in the root folder:
 
     DB_HOST=yourdbip
     DB_PORT=yourdbport
@@ -31,5 +31,7 @@ Create a file in the root folder with this structure:
     DB_PASS=yourdbpass
     SERVER_HOST=yourserverip
     SERVER_PORT=yourserverport
+    MAILER_ADDRESS=youremail@provider.it
+    MAILER_PASS=youremailpass
 
-This file will be used to rapidly access your host and database infos
+This file will be used to rapidly access your environment infos
