@@ -14,22 +14,22 @@ export class GasCar {
     @Column({type: "smallint"})
     displacement: number;
 
-    @Column({type: "smallint"})
+    @Column({type: "float"})
     kilowatt: number;
 
     @Column({type: "tinyint"})
     seats: number;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     category: string;
 
-    @Column({type: "varchar", length:20})
+    @Column({type: "varchar", length:30})
     consumption: string;
 
-    @Column({type: "varchar", length:10})
+    @Column({type: "varchar", length:30})
     trunkSize: string;
 
-    @Column({type: "bool"})
+    @Column({type: "boolean"})
     shift: boolean;
 
     @Column({type: "tinyint"})
