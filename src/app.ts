@@ -1,7 +1,8 @@
 import express, { Application, Request, Response } from "express";
 
 import { Router } from "./router";
-import {createConnection} from "typeorm";
+import { Mailer } from "./mailer";
+import { createConnection } from "typeorm";
 import cors from "cors";
 import jwt from "express-jwt";
 import fs from 'fs';
@@ -24,6 +25,8 @@ class App {
             //IMPOSTO LE ROTTE.
             this.config();
             this.router.setRoutes(this.app);
+
+			Mailer.init();
 
             //METODO PER LA GESTIONE DEGLI ERRORI
             this.app.use(errorHandler);
