@@ -88,7 +88,8 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
     vehicle.model = addNewVehiclePayload.body.model;
     vehicle.serialNumber = addNewVehiclePayload.body.serialNumber;
     vehicle.type = addNewVehiclePayload.body.type;
-    vehicle.main_image = addNewVehiclePayload.body.main_image;
+
+    vehicle.mainImage = formatPrefixPhotos(addNewVehiclePayload.body) + "main";
 
     vehicle.photos = addNewVehiclePayload.body.photos.map((photoURL : string) => {
         let vehiclePhoto = new VehiclePhoto();
@@ -169,4 +170,34 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
     }
 
     return undefined;
+}
+
+function formatPrefixPhotos(vehicle){
+
+    let output = "/";
+
+    switch (vehicle.type) {
+        case 0:
+        case 1:
+            output += "cars/"
+            break;
+        case 2:
+        case 3:
+            output += "motorbikes/"
+            break;
+        case 4:
+            output += "bikes/"
+            break;
+        case 5:
+            output += "scooters/"
+            break;
+        default:
+            break;
+    }
+
+    output += vehicle.brand + "-" + vehicle.model + "/";
+    output += vehicle.serialNumber + "/";
+    output += vehicle.features.licensePlate + "-" + vehicle.type + "-" ;
+
+    return output;
 }
