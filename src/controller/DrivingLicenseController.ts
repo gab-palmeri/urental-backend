@@ -36,4 +36,19 @@ export class DrivingLicenseController{
         });
     }
 
+	public async delete(req: Request, res: Response, next:any)
+	{
+		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
+    	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
+
+        Promise.resolve(drivingLicenseService.deleteLicense(decodedToken['id'])).then(function(httpError){
+
+            if(httpError != undefined)
+                return next(createHttpError(httpError.code, httpError.message));
+
+            res.status(200).send();
+        });
+		
+	}
+
 }

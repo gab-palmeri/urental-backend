@@ -24,3 +24,15 @@ export async function editOrCreate(userId:number,licensePayload:any){
 	}
 
 }
+
+export async function deleteLicense(userId:number){
+
+	try{
+		
+		await getRepository(DrivingLicense).delete({"user":userId})
+
+	} catch (error) {
+		return {code:500, message:"Errore interno al server"};
+	}
+
+}
