@@ -23,7 +23,7 @@ export const drivingLicenseSchema = Joi.object({
             'any.required': 'La data di rilascio è obbligatoria'
         }),
 
-    expiryDate: Joi.date()
+    expirationDate: Joi.date()
         .format('YYYY-MM-DD')
         .greater('now')
         .required()
@@ -34,22 +34,34 @@ export const drivingLicenseSchema = Joi.object({
         }),
 
     releasedFrom: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
+        .pattern(new RegExp('^MC-[A-Z]{2}$'))
         .required()
         .messages({
-            'string.min': `L'ente di rilascio deve essere di almeno 3 caratteri`,
-            'string.max': `L'ente di rilascio non può eccedere i 30 caratteri`,
+            'string.pattern.base': `L'ente di rilascio deve essere nel formato MC-XX`,
             'any.required': `L'ente di rilascio è obbligatorio`
         }),
+	
+	A1: Joi.boolean()
+		.required()
+		.messages({
+            'any.required': `Specificare se l'utente ha la patente A1`
+        }),
+	
+	A2: Joi.boolean()
+		.required()
+		.messages({
+            'any.required': `Specificare se l'utente ha la patente A2`
+        }),
+	
+	A3: Joi.boolean()
+		.required()
+		.messages({
+            'any.required': `Specificare se l'utente ha la patente A3`
+        }),
 
-    licenseCategory: Joi.string()
-        .alphanum()
-        .max(3)
-        .required()
-        .messages({
-            'string.max': `La categoria della patente deve essere di massimo 3 caratteri`,
-            'any.required': `La categoria della patente è obbligatoria`
+	B: Joi.boolean()
+		.required()
+		.messages({
+            'any.required': `Specificare se l'utente ha la patente B`
         }),
 });
