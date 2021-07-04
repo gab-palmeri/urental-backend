@@ -79,6 +79,21 @@ export class UserController
 
     }
 
+	public async getProfile(req: Request, res: Response, next:any)
+	{
+		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
+    	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
+
+		Promise.resolve(userService.getProfile(decodedToken['id'])).then(function(value) {
+
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+            else
+                res.status(200).send(value.profile);
+
+        });
+	}
+
     public async changePin(req: Request, res: Response, next:any)
     {
         if(req.body.newPin == undefined || req.body.newPin.length != 4)

@@ -16,5 +16,7 @@ export class UserRoutes
             .get(this.userController.activate)
         app.route('/users/changePin')
             .put(this.userController.changePin)
+		app.route('/users/profile')
+			.get(this.userController.getProfile)
     }
 }

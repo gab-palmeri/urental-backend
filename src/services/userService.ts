@@ -9,7 +9,10 @@ import { Mailer } from '../mailer';
 
 export async function authUser(email:string, password:string): Promise<any> {
 
-    const user = await getRepository(User).findOne({where:{'email': email}})
+    const user = await getRepository(User).findOne({
+    	select: ["id", "email", "password"],
+		where: { email: email },
+	})
 
     if(user == null || !bcrypt.compareSync(password, user.password))
         return {httpError: {code:400, message:"Email o password errati"}, token: undefined};
@@ -43,7 +46,7 @@ export async function createUser(userPayload:any, hasDrivingLicense:boolean): Pr
     user.pin = userPayload.pin;
 
     if(hasDrivingLicense)
-        user.drivingLicenses = [userPayload.drivingLicense];
+        user.drivingLicense = userPayload.drivingLicense;
 
     try {
 
@@ -99,19 +102,42 @@ export async function changePin(userId:number, newPin:string): Promise<any> {
     } catch (error) {
         return {code:500, message:"Errore interno al server"};
     }
+}
+
+export async function getProfile(userId:number): Promise<any> {
+
+    try {
+
+        const user = await getRepository(User).findOne({
+			relations: ['drivingLicense'],
+			where: { 'id': userId }
+		});
+
+        return {httpError:undefined, profile:user};
+
+    } catch (error) {
+		console.log(error);
+        return {httpError: {code:500, message:"Errore interno al server"}, profile:undefined};
+    }
+}
+
+export async function hasDrivingLicense(userId:number): Promise<boolean>{
+
+	const user = await getRepository(User).findOne({
+		relations: ['drivingLicense'],
+		where: { 'id': userId }
+	});
+
+	return user.drivingLicense != undefined;
 
 }
 
 function converToCapitalizedCase(words: string): string {
 	
-
 	const wordsArray = words.toLowerCase().split(" ");
-
 
     for (var i = 0; i < wordsArray.length; i++)
         wordsArray[i] = wordsArray[i].charAt(0).toUpperCase() + wordsArray[i].slice(1);
 
-
     return wordsArray.join(" ");
-
 }
