@@ -34,7 +34,7 @@ const drivingLicenseFields = {
         }),
 
     releasedFrom: Joi.string()
-        .pattern(new RegExp('^MC-[A-Z]{2}$'))
+        .pattern(new RegExp('^MC-[A-Z]{2}$', 'i'))
         .required()
         .messages({
             'string.pattern.base': `L'ente di rilascio deve essere nel formato MC-XX`,

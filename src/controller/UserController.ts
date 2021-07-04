@@ -45,8 +45,12 @@ export class UserController
             if(error != undefined)
                 return next(createHttpError(400, error.details[0].message));
 
+			req.body.drivingLicense.licenseNumber = req.body.drivingLicense.licenseNumber.toUpperCase();
+			req.body.drivingLicense.releasedFrom = req.body.drivingLicense.releasedFrom.toUpperCase();
             hasDrivingLicense = true;
         }
+
+		req.body.fiscalCode = req.body.fiscalCode.toUpperCase();
 
         Promise.resolve(userService.createUser(req.body, hasDrivingLicense)).then(function(httpError) {
             if(httpError != undefined)
