@@ -1,3 +1,10 @@
+import multer from "multer";
+import createHttpError from "http-errors";
+
+import * as fs from "fs";
+import { promisify } from "util";
+import stream from "stream";
+
 import { StaffController } from "../controller/StaffController";
 
 export class StaffRoutes{
@@ -15,7 +22,67 @@ export class StaffRoutes{
         app.route("/staffs/createDriver")
             .post(this.staffController.createDriver)
 
-        app.route("/staffs/addNewVehicle")
-            .post(this.staffController.addNewVehicle);
+        addNewVehicleRoute(app, StaffRoutes.staffController);
     }
+}
+
+let addNewVehicleRoute = (app, staffController) => {
+
+    const upload = multer().fields([
+        { name: "mainImage"},
+        { name: "photos"}
+    ]);
+    const pipeline = promisify(stream.pipeline);
+
+
+
+    app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
+
+        if(!fs.existsSync(res.locals.dirPath))
+            fs.mkdirSync(res.locals.dirPath, { recursive: true});
+
+        await pipeline(
+            req.files.mainImage[0].stream,
+            fs.createWriteStream(res.locals.destionationPaths[0])
+        )
+
+        await pipeline(
+            req.files.photos[0].stream,
+            fs.createWriteStream(res.locals.destionationPaths[1])
+        )
+
+        await pipeline(
+            req.files.photos[1].stream,
+            fs.createWriteStream(res.locals.destionationPaths[2])
+        )
+
+        res.status(200).send("file uploaded");
+    })
+}
+
+let validationPhoto = function(req, res, next){
+    if(req.files.mainImage.length == 0)
+        return next(createHttpError(400, "la mainImage è obbligatoria"));
+
+    if(req.files.mainImage.length != 1)
+        return next(createHttpError(400, "la mainImage deve essere solo una"));
+
+    if(req.files.photos.length == 0)
+        return next(createHttpError(400, "photos sono obbligatorie"));
+
+    if(req.files.photos.length != 2)
+        return next(createHttpError(400, "photos devono essere 2"));
+
+    next();
+}
+
+let generationDirPath = function(req, res, next){
+
+    res.locals.destionationPaths = [
+        "." + req.files.mainImage[0].originalName.split(".")[1],
+        "." + req.files.photos[0].originalName.split(".")[1],
+        "." + req.files.photos[1].originalName.split(".")[1]
+    ];
+
+    next();
 }

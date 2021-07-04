@@ -12,7 +12,7 @@ export class GasMotorbike {
     licensePlate: string;
 
     @Column({type: "smallint"})
-    capacity: number;
+    displacement: number;
 
     @Column({type: "float"})
     kilowatt: number;

@@ -75,7 +75,7 @@ function verifyRoleFromToken(token: any) : object{
     return undefined;
 }
 
-export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
+export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : Promise<any>{
 
     const token = addNewVehiclePayload.headers.authorization.split(" ")[1];
     let httpError = verifyRoleFromToken(token);
@@ -89,16 +89,15 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
     vehicle.serialNumber = addNewVehiclePayload.body.serialNumber;
     vehicle.type = addNewVehiclePayload.body.type;
 
-    vehicle.mainImage = formatPrefixPhotos(addNewVehiclePayload.body) + "main";
-
-    vehicle.photos = addNewVehiclePayload.body.photos.map((photoURL : string) => {
+    vehicle.mainImage = photosPaths[0];
+    vehicle.photos = photosPaths.slice(1).map((photoURL : string) => {
         let vehiclePhoto = new VehiclePhoto();
         vehiclePhoto.imgUrl = photoURL;
         return vehiclePhoto;
     });
 
-    switch (vehicle.type) {
-        case 0:
+    switch (addNewVehiclePayload.body.type) {
+        case "0":
 
             let gasCar = new GasCar();
 
@@ -108,7 +107,7 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
 
             vehicle.gasCar = Promise.resolve(gasCar);
             break;
-        case 1:
+        case "1":
 
             let electricCar = new ElectricCar();
 
@@ -118,7 +117,7 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
 
             vehicle.electricCar = Promise.resolve(electricCar);
             break;
-        case 2:
+        case "2":
             let gasMotorbike = new GasMotorbike();
 
             Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
@@ -127,7 +126,7 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
 
             vehicle.gasMotorbike = Promise.resolve(gasMotorbike);
             break;
-        case 3:
+        case "3":
             let electricMotorbike = new ElectricMotorbike();
 
             Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
@@ -136,7 +135,7 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
 
             vehicle.electricMotorbike = Promise.resolve(electricMotorbike);
             break;
-        case 4:
+        case "4":
             let bike = new Bike();
 
             Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
@@ -145,7 +144,7 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
 
             vehicle.bike = Promise.resolve(bike);
             break;
-        case 5:
+        case "5":
             let scooter = new Scooter();
 
             Object.keys(addNewVehiclePayload.body.features).forEach(function(key){
@@ -170,34 +169,4 @@ export async function addNewVehicle(addNewVehiclePayload : any) : Promise<any>{
     }
 
     return undefined;
-}
-
-function formatPrefixPhotos(vehicle){
-
-    let output = "/";
-
-    switch (vehicle.type) {
-        case 0:
-        case 1:
-            output += "cars/"
-            break;
-        case 2:
-        case 3:
-            output += "motorbikes/"
-            break;
-        case 4:
-            output += "bikes/"
-            break;
-        case 5:
-            output += "scooters/"
-            break;
-        default:
-            break;
-    }
-
-    output += vehicle.brand + "-" + vehicle.model + "/";
-    output += vehicle.serialNumber + "/";
-    output += vehicle.features.licensePlate + "-" + vehicle.type + "-" ;
-
-    return output;
 }

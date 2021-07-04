@@ -37,26 +37,4 @@ export const vehicleSchema = Joi.object({
             "number.max" : "Il type non può essere maggiore di 5",
             "any.required": "Il type è obbligatorio"
         }),
-
-
-    mainImage: Joi.string()
-        .required()
-        .messages({
-            "any.required" : "Il main_image è obbligatorio"
-        }),
-
-
-    photos: Joi.array()
-        .items(
-            Joi.string()
-                .messages({
-                    "string.base" : "URL devono essere delle stringhe"
-                })
-        )
-        .min(2)
-        .required()
-        .messages({
-            "array.min" : "photos devono essere almeno 2",
-            "any.required" : "photos è obbligatorio"
-        })
 })
