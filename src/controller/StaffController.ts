@@ -19,7 +19,6 @@ import * as staffService from "../services/staffService";
 import * as driverService from "../services/driverService";
 
 
-
 export class StaffController{
 
     public async auth(req: Request, res: Response, next: any){
@@ -72,30 +71,30 @@ export class StaffController{
 
     public async addNewVehicle(req: Request, res: Response, next: any){
 
-        let { error, value } = vehicleSchema.validate(req.body, {allowUnknown: true});
+        let { error, value } = vehicleSchema.validate(req.body, { allowUnknown: true });
 
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
         let result;
         switch (req.body.type){
-            case 0:
-                result  = gasCarSchema.validate(req.body, {allowUnknown: true});
+            case "0":
+                result  = gasCarSchema.validate(req.body, { allowUnknown: true });
                 break;
-            case 1:
-                result = electricCarSchema.validate(req.body, {allowUnknown: true});
+            case "1":
+                result = electricCarSchema.validate(req.body, { allowUnknown: true });
                 break;
-            case 2:
-                result = gasMotorbikeSchema.validate(req.body, {allowUnknown: true});
+            case "2":
+                result = gasMotorbikeSchema.validate(req.body, { allowUnknown: true });
                 break;
-            case 3:
-                result = electricMotorbikeSchema.validate(req.body, {allowUnknown: true});
+            case "3":
+                result = electricMotorbikeSchema.validate(req.body, { allowUnknown: true });
                 break;
-            case 4:
-                result = bikeSchema.validate(req.body, {allowUnknown: true});
+            case "4":
+                result = bikeSchema.validate(req.body, { allowUnknown: true });
                 break;
-            case 5:
-                result = scooterSchema.validate(req.body, {allowUnknown: true});
+            case "5":
+                result = scooterSchema.validate(req.body, { allowUnknown: true });
                 break;
             default:
                 break;
@@ -104,13 +103,60 @@ export class StaffController{
         if(result.error != undefined)
             return next(createHttpError(400, result.error.details[0].message));
 
-        Promise.resolve(staffService.addNewVehicle(req)).then(function(httpError){
+        let prefixPaths = prefixPathPhotos(req.body);
 
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+        res.locals.dirPath = prefixPaths
 
-            res.status(200).send();
-        });
+        switch (req.body.type){
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+                prefixPaths += req.body.serialNumber + "-";
+                break;
+            default:
+                break;
+        }
+
+        res.locals.destionationPaths = [
+            prefixPaths + "main" + res.locals.destionationPaths[0],
+            prefixPaths + "1" + res.locals.destionationPaths[0],
+            prefixPaths + "2" + res.locals.destionationPaths[0],
+        ];
+
+
+        let httpError = await Promise.resolve(staffService.addNewVehicle(req, res.locals.destionationPaths));
+
+        if(httpError != undefined)
+            return next(createHttpError(httpError.code, httpError.message));
+        else
+            next();
+    }
+}
+
+
+function prefixPathPhotos(vehicle){
+
+    let output = "assets/";
+
+    switch (vehicle.type) {
+        case "0":
+        case "1":
+            output += "cars/" + vehicle.brand + "-" + vehicle.model + "/" + vehicle.serialNumber + "/"
+            break;
+        case "2":
+        case "3":
+            output += "motorbikes/" + vehicle.brand + "-" + vehicle.model + "/" + vehicle.serialNumber + "/"
+            break;
+        case "4":
+            output += "bikes/" + vehicle.brand + "-" + vehicle.model + "/"
+            break;
+        case "5":
+            output += "scooters/" + vehicle.brand + "-" + vehicle.model + "/"
+            break;
+        default:
+            break;
     }
 
+    return output;
 }

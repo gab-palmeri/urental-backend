@@ -21,7 +21,7 @@ export class Vehicle {
     @Column({type: "varchar",length: 20})
     model: string;
 
-    @Column({type: "varchar",length: 16})
+    @Column({type: "varchar",length: 16, unique:true})
     serialNumber: string;
 
     @Column({type: "tinyint"})
