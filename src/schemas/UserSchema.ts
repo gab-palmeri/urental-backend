@@ -43,11 +43,13 @@ export const userSchema = Joi.object({
 
     birthDate: Joi.date()
         .format('YYYY-MM-DD')
-        .less('now')
+		.greater(new Date().setFullYear(new Date().getFullYear() - 120))
+        .less(new Date().setFullYear(new Date().getFullYear() - 15))
         .required()
         .messages({
             'date.format': 'La data di nascita deve essere nel formato YYYY-MM-DD',
-            'date.less': 'La data di nascita non può essere superiore a quella attuale',
+			'date.greater': 'Devi avere meno di 120 anni per accedere al portale',
+            'date.less': 'Devi avere almeno 15 anni per accedere al portale',
             'any.required': 'La data di nascita è obbligatoria'
         }),
 
@@ -89,4 +91,4 @@ export const userSchema = Joi.object({
             'string.empty': 'Il pin non può essere vuoto',
             'any.required': `Il pin è obbligatorio`
         })
-});
+});	
