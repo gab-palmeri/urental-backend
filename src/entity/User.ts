@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 
 import {DrivingLicense} from "./DrivingLicense";
 
@@ -26,18 +26,18 @@ export class User {
     @Column({type: "varchar", length: 32, nullable: false, unique: true})
     email: string;
 
-    @Column({type: "text", nullable: false})
+    @Column({type: "text", nullable: false, select:false})
     password: string;
 
-    @Column({type: "bool", nullable: false})
+    @Column({type: "bool", nullable: false, select:false})
     active: number;
 
-    @Column({type: "varchar", length:4, nullable: true})
+    @Column({type: "varchar", length:4, nullable: true, select:false})
     pin: string;
 
     //RELAZIONI
 
-    @OneToMany(() => DrivingLicense, drivingLicense => drivingLicense.user, {cascade: true})
-    drivingLicenses: DrivingLicense[];
+	@OneToOne(() => DrivingLicense, drivingLicense => drivingLicense.user, {cascade : true})
+    drivingLicense: DrivingLicense;
 
 }

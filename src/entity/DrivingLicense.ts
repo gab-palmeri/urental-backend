@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
 
 import {User} from "./User";
 
@@ -8,8 +8,9 @@ export class DrivingLicense {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, user => user.drivingLicenses)
-    user: User;
+    @OneToOne(() => User, user => user.drivingLicense)
+	@JoinColumn()
+    user: number;
 
     @Column({type: "varchar",length: 10})
     licenseNumber: string;
@@ -24,15 +25,15 @@ export class DrivingLicense {
     releasedFrom: string;
 
     @Column({type: "boolean"})
-    A1: string;
+    A1: boolean;
 
 	@Column({type: "boolean"})
-    A2: string;
+    A2: boolean;
 
 	@Column({type: "boolean"})
-    A3: string;
+    A3: boolean;
 
 	@Column({type: "boolean"})
-    B: string;
+    B: boolean;
 
 }

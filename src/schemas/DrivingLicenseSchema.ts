@@ -3,8 +3,8 @@ import JoiBase from "joi";
 
 const Joi = JoiBase.extend(JoiDate);
 
-export const drivingLicenseSchema = Joi.object({
-    licenseNumber: Joi.string()
+const drivingLicenseFields = {
+  licenseNumber: Joi.string()
         .alphanum()
         .length(10)
         .required()
@@ -64,4 +64,14 @@ export const drivingLicenseSchema = Joi.object({
 		.messages({
             'any.required': `Specificare se l'utente ha la patente B`
         }),
-});
+}
+
+
+export const drivingLicenseSchema = Joi.object({
+  ...drivingLicenseFields,
+})
+
+export const drivingLicenseUpdateSchema = Joi.object({
+  ...drivingLicenseFields
+}).fork(Object.keys(drivingLicenseFields), (schema) => schema.optional())
+
