@@ -18,12 +18,21 @@ export class DrivingLicense {
     releaseDate: Date;
 
     @Column({type: "date"})
-    expiryDate: Date;
+    expirationDate: Date;
 
     @Column({type: "varchar",length: 30})
     releasedFrom: string;
 
-    @Column({type: "varchar",length: 3})
-    licenseCategory: string;
+    @Column({type: "boolean"})
+    A1: string;
+
+	@Column({type: "boolean"})
+    A2: string;
+
+	@Column({type: "boolean"})
+    A3: string;
+
+	@Column({type: "boolean"})
+    B: string;
 
 }
