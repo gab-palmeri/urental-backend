@@ -25,13 +25,12 @@ export class StallController {
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
-        Promise.resolve(stallService.createStall(req.body)).then(function(httpError) {
+        Promise.resolve(stallService.createStall(req)).then(function(httpError){
 
             if(httpError != undefined)
                 return next(createHttpError(httpError.code, httpError.message));
-            else
-                res.status(200).send();
 
+            res.status(200).send();
         });
 
 	}
