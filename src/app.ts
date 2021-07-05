@@ -75,8 +75,7 @@ class App {
                     "/vehicles/preview",
                     "/vehicles/cars",
                     "/vehicles/motorbikes",
-                    pathToRegexp("/vehicles/:brand-:model"),
-					"/stalls"
+                    pathToRegexp("/vehicles/:brand-:model")
                 ]
             }
         ));
