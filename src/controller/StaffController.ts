@@ -76,6 +76,8 @@ export class StaffController{
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
+        req.body.features = JSON.parse(req.body.features);
+
         let result;
         switch (req.body.type){
             case "0":
