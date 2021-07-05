@@ -50,8 +50,8 @@ export class VehicleController
                 return next(createHttpError(value.httpError.code, value.httpError.message));
 
             let vehiclesResponse = {};
-            vehiclesResponse["brand"] = req.params.brand;
-            vehiclesResponse["model"] = req.params.model;
+            vehiclesResponse["brand"] = value.vehiclesData[0].brand;
+            vehiclesResponse["model"] = value.vehiclesData[0].model;
             vehiclesResponse["type"] = "";
             vehiclesResponse["engines"] = [];
 
