@@ -37,23 +37,23 @@ let addNewVehicleRoute = (app, staffController) => {
 
     app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
 
-        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(res.locals.dirPath)){
+        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(req.dirPath)){
 
-            fs.mkdirSync(res.locals.dirPath, { recursive: true});
+            fs.mkdirSync(req.dirPath, { recursive: true});
 
             await pipeline(
                 req.files.mainImage[0].stream,
-                fs.createWriteStream(res.locals.destionationPaths[0])
+                fs.createWriteStream(req.destionationPaths[0])
             )
 
             await pipeline(
                 req.files.photos[0].stream,
-                fs.createWriteStream(res.locals.destionationPaths[1])
+                fs.createWriteStream(req.destionationPaths[1])
             )
 
             await pipeline(
                 req.files.photos[1].stream,
-                fs.createWriteStream(res.locals.destionationPaths[2])
+                fs.createWriteStream(req.destionationPaths[2])
             )
         }
 
@@ -87,7 +87,7 @@ let generationDirPath = function(req, res, next){
     if(["4", "5"].includes(req.body.type))
         next();
     else{
-        res.locals.destionationPaths = [
+        req.destionationPaths = [
             "." + req.files.mainImage[0].originalName.split(".")[1],
             "." + req.files.photos[0].originalName.split(".")[1],
             "." + req.files.photos[1].originalName.split(".")[1]
