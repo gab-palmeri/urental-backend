@@ -35,54 +35,64 @@ let addNewVehicleRoute = (app, staffController) => {
     const pipeline = promisify(stream.pipeline);
 
 
-
     app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
 
-        if(!fs.existsSync(res.locals.dirPath))
+        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(res.locals.dirPath)){
+
             fs.mkdirSync(res.locals.dirPath, { recursive: true});
 
-        await pipeline(
-            req.files.mainImage[0].stream,
-            fs.createWriteStream(res.locals.destionationPaths[0])
-        )
+            await pipeline(
+                req.files.mainImage[0].stream,
+                fs.createWriteStream(res.locals.destionationPaths[0])
+            )
 
-        await pipeline(
-            req.files.photos[0].stream,
-            fs.createWriteStream(res.locals.destionationPaths[1])
-        )
+            await pipeline(
+                req.files.photos[0].stream,
+                fs.createWriteStream(res.locals.destionationPaths[1])
+            )
 
-        await pipeline(
-            req.files.photos[1].stream,
-            fs.createWriteStream(res.locals.destionationPaths[2])
-        )
+            await pipeline(
+                req.files.photos[1].stream,
+                fs.createWriteStream(res.locals.destionationPaths[2])
+            )
+        }
 
-        res.status(200).send("file uploaded");
+        res.status(200).send();
     })
 }
 
 let validationPhoto = function(req, res, next){
-    if(req.files.mainImage.length == 0)
-        return next(createHttpError(400, "la mainImage è obbligatoria"));
 
-    if(req.files.mainImage.length != 1)
-        return next(createHttpError(400, "la mainImage deve essere solo una"));
+    if(["4", "5"].includes(req.body.type))
+        next();
+    else{
+        if(req.files.mainImage.length == 0)
+            return next(createHttpError(400, "la mainImage è obbligatoria"));
 
-    if(req.files.photos.length == 0)
-        return next(createHttpError(400, "photos sono obbligatorie"));
+        if(req.files.mainImage.length != 1)
+            return next(createHttpError(400, "la mainImage deve essere solo una"));
 
-    if(req.files.photos.length != 2)
-        return next(createHttpError(400, "photos devono essere 2"));
+        if(req.files.photos.length == 0)
+            return next(createHttpError(400, "photos sono obbligatorie"));
 
-    next();
+        if(req.files.photos.length != 2)
+            return next(createHttpError(400, "photos devono essere 2"));
+
+        next();
+    }
 }
 
 let generationDirPath = function(req, res, next){
 
-    res.locals.destionationPaths = [
-        "." + req.files.mainImage[0].originalName.split(".")[1],
-        "." + req.files.photos[0].originalName.split(".")[1],
-        "." + req.files.photos[1].originalName.split(".")[1]
-    ];
+    if(["4", "5"].includes(req.body.type))
+        next();
+    else{
+        res.locals.destionationPaths = [
+            "." + req.files.mainImage[0].originalName.split(".")[1],
+            "." + req.files.photos[0].originalName.split(".")[1],
+            "." + req.files.photos[1].originalName.split(".")[1]
+        ];
 
-    next();
+        next();
+    }
 }
