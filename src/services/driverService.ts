@@ -66,3 +66,34 @@ function verifyRoleFromToken(token: any) : object{
 
     return undefined;
 }
+
+export async function checkAvailability(bookingPayload:any): Promise<any> {
+
+	try {
+
+		const drivers = await getRepository(Driver).find({relations:['bookings']});
+
+		var available = drivers.some(driver => {
+
+			console.log("driver: " + driver.name);
+
+			return driver.bookings.every(booking => {
+				var fc1 = new Date(bookingPayload.pickUpDateTime) < booking.pickUpDateTime;
+				var fc2 = new Date(bookingPayload.deliveryDateTime) < booking.pickUpDateTime;
+				var sc1 = new Date(bookingPayload.pickUpDateTime) > booking.deliveryDateTime;
+				var sc2 = new Date(bookingPayload.deliveryDateTime) > booking.deliveryDateTime; 
+
+				return (fc1 && fc2) || (sc1 && sc2);
+			});
+		});
+
+		return {availability: available};
+
+    } catch(err)
+    {
+        console.log(err);
+        return {code:500, message:"Errore interno al server"};
+    }
+
+
+}
