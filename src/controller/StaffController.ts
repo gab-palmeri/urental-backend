@@ -17,6 +17,7 @@ import {
 
 import * as staffService from "../services/staffService";
 import * as driverService from "../services/driverService";
+import fs from "fs";
 
 
 export class StaffController{
@@ -120,12 +121,27 @@ export class StaffController{
                 break;
         }
 
-        res.locals.destionationPaths = [
-            prefixPaths + "main" + res.locals.destionationPaths[0],
-            prefixPaths + "1" + res.locals.destionationPaths[0],
-            prefixPaths + "2" + res.locals.destionationPaths[0],
-        ];
+        if(["4", "5"].includes(req.body.type)){
 
+            try{
+                let files = fs.readdirSync(prefixPaths);
+
+                res.locals.destionationPaths = []
+
+                files.reverse().forEach(file => {
+                    res.locals.destionationPaths.push(prefixPaths + file);
+                });
+            }catch(e){
+                return next(createHttpError(400, "Bike o Scooter non convenzionato"));
+            }
+        }
+        else{
+            res.locals.destionationPaths = [
+                prefixPaths + "main" + res.locals.destionationPaths[0],
+                prefixPaths + "1" + res.locals.destionationPaths[0],
+                prefixPaths + "2" + res.locals.destionationPaths[0],
+            ];
+        }
 
         let httpError = await Promise.resolve(staffService.addNewVehicle(req, res.locals.destionationPaths));
 
