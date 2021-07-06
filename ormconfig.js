@@ -15,5 +15,6 @@ module.exports = {
 	],
 	"cli": {
 		"migrationsDir": "src/migration"
-	}
+	},
+	"timezone": 'Z'
 }
