@@ -30,6 +30,15 @@ export class Vehicle {
     @Column({type: "text"})
     mainImage: string;
 
+	@Column({type: "float"})
+    hourlyPrice: number;
+
+	@Column({type: "float"})
+    dailyPrice: number;
+
+	@Column({type: "float"})
+    driverPrice: number;
+
     @OneToMany(() => VehiclePhoto, photo => photo.vehicle, {cascade : true})
     photos: VehiclePhoto[];
 

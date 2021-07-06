@@ -63,6 +63,25 @@ export async function getMotorbikes(): Promise<any> {
 
 }
 
+export async function getVehiclePrices(serialNumber: string): Promise<any> {
+
+	try {
+
+        const vehiclePrices = await getRepository(Vehicle).find({
+            select: ["serialNumber", "hourlyPrice", "dailyPrice", "driverPrice"],
+            where: { serialNumber: serialNumber}
+        });
+
+		if(vehiclePrices.length == 0)
+			return {httpError: {code:404, message:"Veicolo non trovato"}, vehiclePrices: undefined}
+
+        return {httpError: undefined, vehiclePrices: vehiclePrices}
+
+    } catch (error) {
+        return {httpError: {code:500, message:"Errore interno al server"}, vehiclePrices: undefined}
+    }
+}
+
 export async function getVehiclesByBrandAndModel(brand: string, model: string): Promise<any> {
 
     try {
