@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from "typeorm";
 
 import { Vehicle } from './Vehicle';
 import { Driver } from './Driver';
@@ -28,32 +28,27 @@ export class Booking {
     user: User;
 
 	@ManyToOne(() => Stall, stall => stall.deliveryBookings, {nullable:false})
-    deliveryStall: Stall;
+    pickUpStall: Stall;
 
 	@ManyToOne(() => Stall, stall => stall.returnBookings, {nullable:false})
-    returnStall: Stall;
+    deliveryStall: Stall;
 
 	@OneToOne(() => Booking, booking => booking.payment, {nullable:false})
-    payment: Payment;
+    @JoinColumn()
+	payment: Payment;
 
 	//DATA
 
 	@Column({type: "timestamp"})
     bookingTimestamp: string;
 
-	@Column({type: "date"})
-    deliveryDate: string;
+	@Column({type: "datetime"})
+    pickUpDateTime: Date;
 
-	@Column({type: "time"})
-    deliveryTime: string;
-
-	@Column({type: "tinyint", length:32})
+	@Column({type: "tinyint"})
     duration: number;
 
-	@Column({type: "date"})
-    returnDate: string;
-
-	@Column({type: "time"})
-    returnTime: string;
+	@Column({type: "datetime"})
+    deliveryDateTime: Date;
 
 }

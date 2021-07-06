@@ -15,7 +15,6 @@ export class Payment {
     paymentCode: string;
 
     @OneToOne(() => Booking, booking => booking.payment)
-    @JoinColumn()
     booking: Booking;
 
 }
