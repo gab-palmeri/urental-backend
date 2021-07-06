@@ -31,8 +31,6 @@ export async function createStall(stallPayload:any): Promise<any> {
     stall.name = stallPayload.body.name;
     stall.address = stallPayload.body.address;
     stall.city = stallPayload.body.city;
-	stall.latitude = stallPayload.body.latitude;
-	stall.longitude = stallPayload.body.longitude;
 
     try {
 

@@ -18,12 +18,6 @@ export class Stall {
 	@Column({type: "varchar", length:30})
     city: string;
 
-	@Column({type: "text"})
-    latitude: string;
-
-	@Column({type: "text"})
-    longitude: string;
-
 	@OneToMany(() => Booking, booking => booking.user)
     deliveryBookings: Booking[];
 
