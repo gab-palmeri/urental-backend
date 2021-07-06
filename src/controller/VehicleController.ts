@@ -42,6 +42,19 @@ export class VehicleController
         });
     }
 
+
+	public async getVehiclePrices(req: Request, res: Response, next:any){
+
+		Promise.resolve(vehicleService.getVehiclePrices(req.params.serialNumber)).then(function(value) {
+
+            if(value.httpError == undefined)
+                res.status(200).send(value.vehiclePrices);
+            else
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+        });
+
+	}
+
     //METODI PER I SINGOLI BRAND
     public async getVehicleOptions(req: Request, res: Response, next:any){
         Promise.resolve(vehicleService.getVehiclesByBrandAndModel(req.params.brand, req.params.model)).then(async function(value) {
