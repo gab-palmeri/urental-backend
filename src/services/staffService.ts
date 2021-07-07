@@ -96,6 +96,8 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
         return vehiclePhoto;
     });
 
+    console.log(vehicle)
+
     switch (addNewVehiclePayload.body.type) {
         case "0":
 
@@ -158,6 +160,7 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
     }
 
     try{
+        console.log(vehicle)
         await getRepository(Vehicle).save(vehicle);
     }
     catch(err){

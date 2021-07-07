@@ -142,10 +142,14 @@ export class StaffController{
         else{
             req.destionationPaths = [
                 prefixPaths + "main" + req.destionationPaths[0],
-                prefixPaths + "1" + req.destionationPaths[0],
-                prefixPaths + "2" + req.destionationPaths[0],
+                prefixPaths + "1" + req.destionationPaths[1],
+                prefixPaths + "2" + req.destionationPaths[2],
             ];
         }
+
+        console.log(req.features)
+        console.log(req.dirPath)
+        console.log(req.destionationPaths)
 
         let httpError = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths));
 
