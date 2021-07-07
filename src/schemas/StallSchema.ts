@@ -5,7 +5,7 @@ const Joi = JoiBase.extend(JoiDate);
 
 export const stallSchema = Joi.object({
     name: Joi.string()
-        .alphanum()
+        .pattern(new RegExp('^[A-Za-z]{3,}([ ][A-Za-z]{3,})*$'))
         .min(3)
         .max(100)
         .required()
@@ -17,7 +17,7 @@ export const stallSchema = Joi.object({
         }),
 
     address: Joi.string()
-        .alphanum()
+        .pattern(new RegExp('^[A-Za-z]{3,}([ ][A-Za-z]{3,})*$'))
         .min(3)
         .max(50)
         .required()
