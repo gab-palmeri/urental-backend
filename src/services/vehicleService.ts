@@ -72,11 +72,14 @@ export async function getVehicle(serialNumber:any): Promise<any> {
 			where: { serialNumber: serialNumber}
 		});
 
-		return { httpError: undefined, vehicle: vehicle}
+		if(vehicle != undefined)
+			return { httpError: undefined, vehicle: vehicle}
+		else 
+			return { httpError: {code:404, message:"Veicolo non trovato"}, vehicle: undefined};
 
 	} catch (err) {
 		console.log(err);
-		return {httpError: {code:500, message:"Errore interno al server"}};
+		return {httpError: {code:500, message:"Errore interno al server"}, vehicle: undefined};
 
 	}
 }

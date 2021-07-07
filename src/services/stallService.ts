@@ -55,14 +55,20 @@ export async function getBookingStalls(pickUpStall:number, deliveryStall:number)
 		const stalls = await getRepository(Stall).find({
 			where: { id: In([pickUpStall, deliveryStall])}
 		});
-	
-		return { 
-			httpError: undefined, 
-			stalls: {
-				pickUpStall: stalls.find(stall => stall.id == pickUpStall), 
-				deliveryStall: stalls.find(stall => stall.id == deliveryStall)
+		
+		if(stalls.length == 2)
+			return { 
+				httpError: undefined, 
+				stalls: {
+					pickUpStall: stalls.find(stall => stall.id == pickUpStall), 
+					deliveryStall: stalls.find(stall => stall.id == deliveryStall)
+				}
 			}
-		}
+		else 
+			return {
+				httpError: {code:404, message:"Stalli non trovati"},
+				stalls: undefined
+			}
 
 	} catch (err) {
 		console.log(err);
