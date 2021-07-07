@@ -16,7 +16,7 @@ export async function getPreview(): Promise<any> {
         const motorbikes = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 2 && vehicle.type <= 3).slice(0,3);
 
         //We will have one brand/model for bikes and one brand/model for scooters => one item each
-        const bike = noDuplicatesVehicles.filter(vehicle => vehicle.type == 4)[1];
+        const bike = noDuplicatesVehicles.filter(vehicle => vehicle.type == 4)[0];
         const scooter = noDuplicatesVehicles.filter(vehicle => vehicle.type == 5)[0];
 
         return {httpError: undefined, vehiclesData: {cars: cars, motorbikes: motorbikes, bike: bike, scooter: scooter}}
