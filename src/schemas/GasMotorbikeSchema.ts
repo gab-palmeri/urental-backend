@@ -14,10 +14,10 @@ export const gasMotorbikeSchema = Joi.object({
                 "any.required" : "La licensePlate è obbligatoria"
             }),
 
-        capacity: Joi.number()
+        displacement: Joi.number()
             .required()
             .messages({
-                "any.required" : "La capacity è obbligatorio"
+                "any.required" : "La displacement è obbligatorio"
             }),
 
         kilowatt: Joi.number()
