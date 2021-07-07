@@ -157,6 +157,10 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
             break;
     }
 
+    vehicle.hourlyPrice = 1.1
+    vehicle.dailyPrice = 1.2
+    vehicle.driverPrice = 1.3
+
     try{
         console.log("*************** vehicle ***************");
         console.log(vehicle);
