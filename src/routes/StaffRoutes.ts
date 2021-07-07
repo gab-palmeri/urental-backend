@@ -37,11 +37,6 @@ let addNewVehicleRoute = (app, staffController) => {
 
     app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
 
-        console.log("*************** req.dirPath 2 ***************");
-        console.log(req.dirPath);
-        console.log("*************** req.destionationPaths 3 ***************");
-        console.log(req.destionationPaths);
-
         if(!["4", "5"].includes(req.body.type) && !fs.existsSync(req.dirPath)){
 
             fs.mkdirSync(req.dirPath, { recursive: true});
@@ -67,9 +62,6 @@ let addNewVehicleRoute = (app, staffController) => {
 }
 
 let validationPhoto = function(req, res, next){
-
-    console.log("***************** req.files *****************");
-    console.log(req.files);
 
     if(["4", "5"].includes(req.body.type))
         next();
@@ -100,8 +92,6 @@ let generationDirPath = function(req, res, next){
             "." + req.files.photos[0].originalName.split(".")[1],
             "." + req.files.photos[1].originalName.split(".")[1]
         ];
-        console.log("***************** req.destionationPaths *****************");
-        console.log(req.destionationPaths);
         next();
     }
 }

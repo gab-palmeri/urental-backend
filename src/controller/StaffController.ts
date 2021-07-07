@@ -146,14 +146,6 @@ export class StaffController{
             ];
         }
 
-        console.log("*************** req.body.features ***************");
-        console.log(req.body.features);
-        console.log("*************** req.dirPath ***************");
-        console.log(req.dirPath);
-        console.log("*************** req.destionationPaths 2 ***************");
-        console.log(req.destionationPaths);
-
-
         let httpError = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths.map(path => {
             return path.replace("assets", "");
         })));

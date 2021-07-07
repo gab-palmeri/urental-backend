@@ -88,6 +88,11 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
     vehicle.model = addNewVehiclePayload.body.model;
     vehicle.serialNumber = addNewVehiclePayload.body.serialNumber;
     vehicle.type = addNewVehiclePayload.body.type;
+    vehicle.hourlyPrice = addNewVehiclePayload.body.hourlyPrice;
+    vehicle.dailyPrice = addNewVehiclePayload.body.dailyPrice;
+
+    if(addNewVehiclePayload.body.driverPrice != undefined)
+        vehicle.driverPrice = addNewVehiclePayload.body.driverPrice
 
     vehicle.mainImage = photosPaths[0];
     vehicle.photos = photosPaths.slice(1).map((photoURL : string) => {
@@ -157,25 +162,15 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
             break;
     }
 
-    vehicle.hourlyPrice = 1.1
-    vehicle.dailyPrice = 1.2
-    vehicle.driverPrice = 1.3
-
     try{
-        console.log("*************** vehicle ***************");
-        console.log(vehicle);
         await getRepository(Vehicle).save(vehicle);
     }
     catch(err){
 
         if(err.code == "ER_DUP_ENTRY")
             return {code: 400, message: "Vehicle già esistente."};
-        else{
-            console.log("*********************** err *********************");
-            console.log(err)
+        else
             return {code: 500, message: "Errore interno al server"};
-        }
-
     }
 
     return undefined;
