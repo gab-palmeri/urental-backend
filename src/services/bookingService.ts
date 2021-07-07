@@ -15,6 +15,9 @@ export async function checkAvailability(bookingPayload:any): Promise<any> {
 			where: { serialNumber: bookingPayload.serialNumber }
 		});
 
+		if(vehicle == undefined)
+			return {httpError: {code:404, message:"Veicolo non trovato"}, availability:undefined };
+
 		var available = vehicle.bookings.every(booking => {
 			
 			var fc1 = new Date(bookingPayload.pickUpDateTime) < booking.pickUpDateTime;
@@ -26,12 +29,12 @@ export async function checkAvailability(bookingPayload:any): Promise<any> {
 			return (fc1 && fc2) || (sc1 && sc2);
 		});
 
-		return {availability: available};
+		return {httpError: undefined, availability: available};
 
     } catch(err)
     {
         console.log(err);
-        return {code:500, message:"Errore interno al server"};
+        return {httpError: {code:500, message:"Errore interno al server"}, availability:undefined };
     }
 }
 
