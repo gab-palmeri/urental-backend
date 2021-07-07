@@ -42,6 +42,19 @@ export class VehicleController
         });
     }
 
+
+	public async getVehiclePrices(req: Request, res: Response, next:any){
+
+		Promise.resolve(vehicleService.getVehiclePrices(req.params.serialNumber)).then(function(value) {
+
+            if(value.httpError == undefined)
+                res.status(200).send(value.vehiclePrices);
+            else
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+        });
+
+	}
+
     //METODI PER I SINGOLI BRAND
     public async getVehicleOptions(req: Request, res: Response, next:any){
         Promise.resolve(vehicleService.getVehiclesByBrandAndModel(req.params.brand, req.params.model)).then(async function(value) {
@@ -91,7 +104,6 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(gasCar));
                             engine["mainImage"] = vehicle.mainImage;
-                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "car";
 
                             delete engine.id;
@@ -109,7 +121,6 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(eletricCar));
                             engine["mainImage"] = vehicle.mainImage;
-                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "car";
 
                             delete engine.id;
@@ -127,7 +138,6 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(gasMotorbike));
                             engine["mainImage"] = vehicle.mainImage;
-                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "motorbike";
 
                             delete engine.id;
@@ -145,7 +155,6 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(electricMotorbike));
                             engine["mainImage"] = vehicle.mainImage;
-                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "motorbike";
 
                             delete engine.id;
@@ -163,7 +172,6 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(bike));
                             engine["mainImage"] = vehicle.mainImage;
-                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "bike";
 
                             delete engine.id;
@@ -180,7 +188,6 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(scooter));
                             engine["mainImage"] = vehicle.mainImage;
-                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "scooter";
 
                             delete engine.id;
