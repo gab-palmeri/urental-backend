@@ -3,7 +3,6 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from "typeo
 import { Booking } from './Booking';
 
 @Entity()
-@Unique(["latitude", "longitude"])
 export class Stall {
 
     @PrimaryGeneratedColumn()
