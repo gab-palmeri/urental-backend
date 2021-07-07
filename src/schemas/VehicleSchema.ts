@@ -6,8 +6,8 @@ export const vehicleSchema = Joi.object({
         .max(20)
         .required()
         .messages({
-           "string.max" : "Il brand non può eccedere i 20 caratteri",
-           "any.required": "Il brand è obbligatorio"
+            "string.max" : "Il brand non può eccedere i 20 caratteri",
+            "any.required": "Il brand è obbligatorio"
         }),
 
     model: Joi.string()
@@ -36,5 +36,28 @@ export const vehicleSchema = Joi.object({
             "number.min" : "Il type non può essere minore di 0",
             "number.max" : "Il type non può essere maggiore di 5",
             "any.required": "Il type è obbligatorio"
+        }),
+
+    hourlyPrice: Joi.number()
+        .min(0)
+        .required()
+        .messages({
+            "number.min" : "Il hourlyPrice non può essere minore di 0",
+            "any.required": "Il hourlyPrice è obbligatorio"
+        }),
+
+    dailyPrice: Joi.number()
+        .min(0)
+        .required()
+        .messages({
+            "number.min" : "Il dailyPrice non può essere minore di 0",
+            "any.required": "Il dailyPrice è obbligatorio"
+        }),
+
+    driverPrice: Joi.number()
+        .min(0)
+        .messages({
+            "number.min" : "Il driverPrice non può essere minore di 0",
+            "any.required": "Il driverPrice è obbligatorio"
         }),
 })

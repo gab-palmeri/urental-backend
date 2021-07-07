@@ -88,6 +88,11 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
     vehicle.model = addNewVehiclePayload.body.model;
     vehicle.serialNumber = addNewVehiclePayload.body.serialNumber;
     vehicle.type = addNewVehiclePayload.body.type;
+    vehicle.hourlyPrice = addNewVehiclePayload.body.hourlyPrice;
+    vehicle.dailyPrice = addNewVehiclePayload.body.dailyPrice;
+
+    if(addNewVehiclePayload.body.driverPrice != undefined)
+        vehicle.driverPrice = addNewVehiclePayload.body.driverPrice
 
     vehicle.mainImage = photosPaths[0];
     vehicle.photos = photosPaths.slice(1).map((photoURL : string) => {
