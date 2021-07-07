@@ -158,6 +158,8 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
     }
 
     try{
+        console.log("*************** vehicle ***************");
+        console.log(vehicle);
         await getRepository(Vehicle).save(vehicle);
     }
     catch(err){
