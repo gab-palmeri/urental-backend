@@ -39,7 +39,7 @@ export class Booking {
 
 	//DATA
 
-	@Column({type: "timestamp"})
+	@Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
     bookingTimestamp: string;
 
 	@Column({type: "datetime"})
