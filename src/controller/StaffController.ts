@@ -136,14 +136,19 @@ export class StaffController{
             }
         }
         else{
-            res.locals.destionationPaths = [
-                prefixPaths + "main" + res.locals.destionationPaths[0],
-                prefixPaths + "1" + res.locals.destionationPaths[0],
-                prefixPaths + "2" + res.locals.destionationPaths[0],
+
+            req.destionationPaths = [
+                prefixPaths + "main" + req.destionationPaths[0],
+                prefixPaths + "1" + req.destionationPaths[1],
+                prefixPaths + "2" + req.destionationPaths[2],
             ];
         }
 
-        let httpError = await Promise.resolve(staffService.addNewVehicle(req, res.locals.destionationPaths));
+        console.log(req.features)
+        console.log(req.dirPath)
+        console.log(req.destionationPaths)
+
+        let httpError = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths));
 
         if(httpError != undefined)
             return next(createHttpError(httpError.code, httpError.message));
