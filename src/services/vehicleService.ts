@@ -12,12 +12,12 @@ export async function getPreview(): Promise<any> {
         var noDuplicatesVehicles = removeDuplicateVehicles(vehicles);
 
         //Dividing the query result into 4 sections (cars,motorbikes,bike,scooter)
-        const cars = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 0 && vehicle.type <= 1);
-        const motorbikes = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 2 && vehicle.type <= 3);
+        const cars = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 0 && vehicle.type <= 1).slice(0,4);
+        const motorbikes = noDuplicatesVehicles.filter(vehicle => vehicle.type >= 2 && vehicle.type <= 3).slice(0,3);
 
         //We will have one brand/model for bikes and one brand/model for scooters => one item each
-        const bike = noDuplicatesVehicles.filter(vehicle => vehicle.type == 4);
-        const scooter = noDuplicatesVehicles.filter(vehicle => vehicle.type == 5);
+        const bike = noDuplicatesVehicles.filter(vehicle => vehicle.type == 4)[1];
+        const scooter = noDuplicatesVehicles.filter(vehicle => vehicle.type == 5)[0];
 
         return {httpError: undefined, vehiclesData: {cars: cars, motorbikes: motorbikes, bike: bike, scooter: scooter}}
 

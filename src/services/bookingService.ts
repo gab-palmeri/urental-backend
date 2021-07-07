@@ -9,8 +9,6 @@ import CryptoJS from 'crypto-js';
 export async function checkAvailability(bookingPayload:any): Promise<any> {
 
     try {
-		
-		console.log(bookingPayload);
 
 		var vehicle = await getRepository(Vehicle).findOne({
 			relations: ['bookings'],
