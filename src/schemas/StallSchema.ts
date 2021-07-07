@@ -38,22 +38,6 @@ export const stallSchema = Joi.object({
 			'string.max': 'Il cognome non può eccedere i 50 caratteri',
 			'string.empty': 'Il cognome non può essere vuoto',
 			'any.required': 'Il cognome è obbligatorio'
-		}),
-	latitude: Joi.string()
-		.max(10)
-		.required()
-		.messages({
-			'string.min': 'La latitudine può essere composta da massimo 10 caratteri',
-			'string.empty': 'La latitudine non può essere vuota',
-			'any.required': 'La latitudine è obbligatoria'
-		}),
-	longitude: Joi.string()
-		.max(11)
-		.required()
-		.messages({
-			'string.max': 'La longitudine può essere composta da massimo 11 caratteri',
-			'string.empty': 'La latitudine non può essere vuota',
-			'any.required': 'La latitudine è obbligatoria'
-		}),
+		})
 
 });
