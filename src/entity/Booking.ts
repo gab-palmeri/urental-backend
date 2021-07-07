@@ -33,7 +33,7 @@ export class Booking {
 	@ManyToOne(() => Stall, stall => stall.returnBookings, {nullable:false})
     deliveryStall: Stall;
 
-	@OneToOne(() => Booking, booking => booking.payment, {nullable:false})
+	@OneToOne(() => Payment, payment => payment.booking, {nullable:false, cascade : true})
     @JoinColumn()
 	payment: Payment;
 
@@ -44,9 +44,6 @@ export class Booking {
 
 	@Column({type: "datetime"})
     pickUpDateTime: Date;
-
-	@Column({type: "tinyint"})
-    duration: number;
 
 	@Column({type: "datetime"})
     deliveryDateTime: Date;
