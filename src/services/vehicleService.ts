@@ -63,6 +63,23 @@ export async function getMotorbikes(): Promise<any> {
 
 }
 
+export async function getVehicle(serialNumber:any): Promise<any> {
+
+	try {
+		
+		const vehicle = await getRepository(Vehicle).findOne({
+			where: { serialNumber: serialNumber}
+		});
+
+		return { httpError: undefined, vehicle: vehicle}
+
+	} catch (err) {
+		console.log(err);
+		return {httpError: {code:500, message:"Errore interno al server"}};
+
+	}
+}
+
 export async function getVehiclesByBrandAndModel(brand: string, model: string): Promise<any> {
 
     try {

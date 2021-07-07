@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, In } from "typeorm";
 import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 
@@ -47,6 +47,30 @@ export async function createStall(stallPayload:any): Promise<any> {
     }
 
 }
+
+export async function getBookingStalls(pickUpStall:number, deliveryStall:number): Promise<any> {
+
+	try {
+		
+		const stalls = await getRepository(Stall).find({
+			where: { id: In([pickUpStall, deliveryStall])}
+		});
+	
+		return { 
+			httpError: undefined, 
+			stalls: {
+				pickUpStall: stalls.find(stall => stall.id == pickUpStall), 
+				deliveryStall: stalls.find(stall => stall.id == deliveryStall)
+			}
+		}
+
+	} catch (err) {
+		console.log(err);
+		return {httpError: {code:500, message:"Errore interno al server"}};
+
+	}
+}
+
 
 function verifyRoleFromToken(token: any) : object{
 
