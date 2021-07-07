@@ -4,12 +4,12 @@ export class BookingRoutes{
 
     public static bookingController: BookingController = new BookingController();
 
-    public static setRoutes(app): void{
+    public static setRoutes(app, JWT_MIDDLEWARE): void{
 
         app.route("/booking/availability")
-            .get(this.bookingController.checkAvailability)
+            .get(JWT_MIDDLEWARE, this.bookingController.checkAvailability)
 		
 		app.route("/booking")
-			.post(this.bookingController.createBooking)
+			.post(JWT_MIDDLEWARE, this.bookingController.createBooking)
     }
 }

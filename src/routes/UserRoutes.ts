@@ -6,8 +6,9 @@ export class UserRoutes
     public static userController: UserController = new UserController();
 
     //DECIDO QUALE METODO DEL CONTROLLER USARE PER OGNI /PATH
-    public static setRoutes(app): void
+    public static setRoutes(app, JWT_MIDDLEWARE): void
     {
+
         app.route('/users/auth')
             .post(this.userController.auth)
         app.route('/users/register')
@@ -15,8 +16,8 @@ export class UserRoutes
         app.route('/users/activate')
             .get(this.userController.activate)
         app.route('/users/changePin')
-            .put(this.userController.changePin)
+            .put(JWT_MIDDLEWARE, this.userController.changePin)
 		app.route('/users/profile')
-			.get(this.userController.getProfile)
+			.get(JWT_MIDDLEWARE, this.userController.getProfile)
     }
 }
