@@ -88,12 +88,12 @@ export async function getVehiclePrices(serialNumber: string): Promise<any> {
 
 	try {
 
-        const vehiclePrices = await getRepository(Vehicle).find({
+        const vehiclePrices = await getRepository(Vehicle).findOne({
             select: ["serialNumber", "hourlyPrice", "dailyPrice", "driverPrice"],
             where: { serialNumber: serialNumber}
         });
 
-		if(vehiclePrices.length == 0)
+		if(vehiclePrices == undefined)
 			return {httpError: {code:404, message:"Veicolo non trovato"}, vehiclePrices: undefined}
 
         return {httpError: undefined, vehiclePrices: vehiclePrices}
