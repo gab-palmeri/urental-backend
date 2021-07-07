@@ -92,8 +92,35 @@ export async function checkAvailability(bookingPayload:any): Promise<any> {
     } catch(err)
     {
         console.log(err);
-        return {code:500, message:"Errore interno al server"};
+        return {httpError: {code:500, message:"Errore interno al server"}, availability:undefined};
     }
+}
 
+export async function getAvailableDriver(pickUpDateTime: string, deliveryDateTime: string): Promise<any> {
+
+	try {
+
+		const drivers = await getRepository(Driver).find({relations:['bookings']});
+
+		const availableDriver = drivers.find(driver => {
+
+			return driver.bookings.every(booking => {
+				var fc1 = new Date(pickUpDateTime) < booking.pickUpDateTime;
+				var fc2 = new Date(deliveryDateTime) < booking.pickUpDateTime;
+				var sc1 = new Date(pickUpDateTime) > booking.deliveryDateTime;
+				var sc2 = new Date(deliveryDateTime) > booking.deliveryDateTime; 
+
+				return (fc1 && fc2) || (sc1 && sc2);
+			});
+
+		});
+
+		return {httpError: undefined, driver:availableDriver};
+
+    } catch(err)
+    {
+        console.log(err);
+         return {httpError: {code:500, message:"Errore interno al server"}, driver:undefined};
+    }
 
 }
