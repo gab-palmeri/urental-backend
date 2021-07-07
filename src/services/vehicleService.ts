@@ -79,6 +79,7 @@ export async function getVehicle(serialNumber:any): Promise<any> {
 		return {httpError: {code:500, message:"Errore interno al server"}};
 
 	}
+}
 
 export async function getVehiclePrices(serialNumber: string): Promise<any> {
 
