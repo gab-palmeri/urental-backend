@@ -67,6 +67,8 @@ let addNewVehicleRoute = (app, staffController) => {
 
 let validationPhoto = function(req, res, next){
 
+    console.log(req.files);
+
     if(["4", "5"].includes(req.body.type))
         next();
     else{
