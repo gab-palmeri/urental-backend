@@ -8,5 +8,8 @@ export class BookingRoutes{
 
         app.route("/booking/availability")
             .get(this.bookingController.checkAvailability)
+		
+		app.route("/booking")
+			.post(this.bookingController.createBooking)
     }
 }
