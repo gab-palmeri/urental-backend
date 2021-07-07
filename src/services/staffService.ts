@@ -164,12 +164,8 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
 
         if(err.code == "ER_DUP_ENTRY")
             return {code: 400, message: "Vehicle già esistente."};
-        else{
-            console.log("*********************** err *********************");
-            console.log(err)
+        else
             return {code: 500, message: "Errore interno al server"};
-        }
-
     }
 
     return undefined;
