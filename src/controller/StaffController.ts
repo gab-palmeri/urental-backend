@@ -70,14 +70,17 @@ export class StaffController{
         });
     }
 
-    public async addNewVehicle(req: Request, res: Response, next: any){
+    public async addNewVehicle(req, res: Response, next: any){
 
         let { error, value } = vehicleSchema.validate(req.body, { allowUnknown: true });
 
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
-        req.body.features = JSON.parse(req.body.features);
+        if(typeof req.body.features === "string")
+            req.body.features = JSON.parse(req.body.features);
+        else
+            return next(createHttpError(400, "features invalido"));
 
         let result;
         switch (req.body.type){
@@ -108,7 +111,8 @@ export class StaffController{
 
         let prefixPaths = prefixPathPhotos(req.body);
 
-        res.locals.dirPath = prefixPaths
+
+        req.dirPath = prefixPaths
 
         switch (req.body.type){
             case "0":
@@ -126,24 +130,24 @@ export class StaffController{
             try{
                 let files = fs.readdirSync(prefixPaths);
 
-                res.locals.destionationPaths = []
+                req.destionationPaths = []
 
                 files.reverse().forEach(file => {
-                    res.locals.destionationPaths.push(prefixPaths + file);
+                    req.destionationPaths.push(prefixPaths + file);
                 });
             }catch(e){
                 return next(createHttpError(400, "Bike o Scooter non convenzionato"));
             }
         }
         else{
-            res.locals.destionationPaths = [
-                prefixPaths + "main" + res.locals.destionationPaths[0],
-                prefixPaths + "1" + res.locals.destionationPaths[0],
-                prefixPaths + "2" + res.locals.destionationPaths[0],
+            req.destionationPaths = [
+                prefixPaths + "main" + req.destionationPaths[0],
+                prefixPaths + "1" + req.destionationPaths[0],
+                prefixPaths + "2" + req.destionationPaths[0],
             ];
         }
 
-        let httpError = await Promise.resolve(staffService.addNewVehicle(req, res.locals.destionationPaths));
+        let httpError = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths));
 
         if(httpError != undefined)
             return next(createHttpError(httpError.code, httpError.message));

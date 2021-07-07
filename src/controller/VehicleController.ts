@@ -104,6 +104,7 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(gasCar));
                             engine["mainImage"] = vehicle.mainImage;
+                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "car";
 
                             delete engine.id;
@@ -121,6 +122,7 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(eletricCar));
                             engine["mainImage"] = vehicle.mainImage;
+                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "car";
 
                             delete engine.id;
@@ -138,6 +140,7 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(gasMotorbike));
                             engine["mainImage"] = vehicle.mainImage;
+                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "motorbike";
 
                             delete engine.id;
@@ -155,6 +158,7 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(electricMotorbike));
                             engine["mainImage"] = vehicle.mainImage;
+                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "motorbike";
 
                             delete engine.id;
@@ -172,6 +176,7 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(bike));
                             engine["mainImage"] = vehicle.mainImage;
+                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "bike";
 
                             delete engine.id;
@@ -188,6 +193,7 @@ export class VehicleController
 
                             let engine = JSON.parse(JSON.stringify(scooter));
                             engine["mainImage"] = vehicle.mainImage;
+                            engine["serialNumber"] = vehicle.serialNumber;
                             vehiclesResponse["type"] = "scooter";
 
                             delete engine.id;
