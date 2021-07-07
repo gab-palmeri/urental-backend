@@ -37,28 +37,23 @@ let addNewVehicleRoute = (app, staffController) => {
 
     app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
 
-        console.log("*************** req.dirPath 2 ***************");
-        console.log(req.dirPath);
-        console.log("*************** req.destionationPaths 3 ***************");
-        console.log(req.destionationPaths);
+        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(res.locals.dirPath)){
 
-        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(req.dirPath)){
-
-            fs.mkdirSync(req.dirPath, { recursive: true});
+            fs.mkdirSync(res.locals.dirPath, { recursive: true});
 
             await pipeline(
                 req.files.mainImage[0].stream,
-                fs.createWriteStream(req.destionationPaths[0])
+                fs.createWriteStream(res.locals.destionationPaths[0])
             )
 
             await pipeline(
                 req.files.photos[0].stream,
-                fs.createWriteStream(req.destionationPaths[1])
+                fs.createWriteStream(res.locals.destionationPaths[1])
             )
 
             await pipeline(
                 req.files.photos[1].stream,
-                fs.createWriteStream(req.destionationPaths[2])
+                fs.createWriteStream(res.locals.destionationPaths[2])
             )
         }
 
@@ -68,7 +63,6 @@ let addNewVehicleRoute = (app, staffController) => {
 
 let validationPhoto = function(req, res, next){
 
-    console.log("***************** req.files *****************");
     console.log(req.files);
 
     if(["4", "5"].includes(req.body.type))
@@ -95,13 +89,12 @@ let generationDirPath = function(req, res, next){
     if(["4", "5"].includes(req.body.type))
         next();
     else{
-        req.destionationPaths = [
+        res.locals.destionationPaths = [
             "." + req.files.mainImage[0].originalName.split(".")[1],
             "." + req.files.photos[0].originalName.split(".")[1],
             "." + req.files.photos[1].originalName.split(".")[1]
         ];
-        console.log("***************** req.destionationPaths *****************");
-        console.log(req.destionationPaths);
+
         next();
     }
 }
