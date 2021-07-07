@@ -70,17 +70,14 @@ export class StaffController{
         });
     }
 
-    public async addNewVehicle(req, res: Response, next: any){
+    public async addNewVehicle(req: Request, res: Response, next: any){
 
         let { error, value } = vehicleSchema.validate(req.body, { allowUnknown: true });
 
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
-        if(typeof req.body.features === "string")
-            req.body.features = JSON.parse(req.body.features);
-        else
-            return next(createHttpError(400, "formato features invalido"));
+        req.body.features = JSON.parse(req.body.features);
 
         let result;
         switch (req.body.type){
@@ -111,7 +108,7 @@ export class StaffController{
 
         let prefixPaths = prefixPathPhotos(req.body);
 
-        req.dirPath = prefixPaths
+        res.locals.dirPath = prefixPaths
 
         switch (req.body.type){
             case "0":
@@ -129,20 +126,20 @@ export class StaffController{
             try{
                 let files = fs.readdirSync(prefixPaths);
 
-                req.destionationPaths = []
+                res.locals.destionationPaths = []
 
                 files.reverse().forEach(file => {
-                    req.destionationPaths.push(prefixPaths + file);
+                    res.locals.destionationPaths.push(prefixPaths + file);
                 });
             }catch(e){
                 return next(createHttpError(400, "Bike o Scooter non convenzionato"));
             }
         }
         else{
-            req.destionationPaths = [
-                prefixPaths + "main" + req.destionationPaths[0],
-                prefixPaths + "1" + req.destionationPaths[1],
-                prefixPaths + "2" + req.destionationPaths[2],
+            res.locals.destionationPaths = [
+                prefixPaths + "main" + res.locals.destionationPaths[0],
+                prefixPaths + "1" + res.locals.destionationPaths[0],
+                prefixPaths + "2" + res.locals.destionationPaths[0],
             ];
         }
 

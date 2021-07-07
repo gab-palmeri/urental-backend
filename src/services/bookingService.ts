@@ -9,7 +9,7 @@ import CryptoJS from 'crypto-js';
 export async function checkAvailability(bookingPayload:any): Promise<any> {
 
     try {
-		
+
 		var vehicle = await getRepository(Vehicle).findOne({
 			relations: ['bookings'],
 			where: { serialNumber: bookingPayload.serialNumber }

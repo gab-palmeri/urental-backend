@@ -113,7 +113,10 @@ export async function getAvailableDriver(pickUpDateTime: string, deliveryDateTim
 
 		});
 
-		return {httpError: undefined, driver:availableDriver};
+		if(availableDriver != undefined)
+			return {httpError: undefined, driver:availableDriver};
+		else
+			 return {httpError: {code:404, message:"Autista disponibile non trovato"}, driver:undefined};
 
     } catch(err)
     {

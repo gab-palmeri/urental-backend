@@ -81,7 +81,7 @@ export class BookingController{
 
 		//Argomenti body: pickUpDateTime, deliveryDateTime, driver, seriale
 
-        Promise.resolve(bookingService.checkAvailability(req.body)).then(function(value){
+        Promise.resolve(bookingService.checkAvailability(req.query)).then(function(value){
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.error, value.httpError.message));

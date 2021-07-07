@@ -43,17 +43,17 @@ let addNewVehicleRoute = (app, staffController) => {
 
             await pipeline(
                 req.files.mainImage[0].stream,
-                fs.createWriteStream(req.destionationPaths[0])
+                fs.createWriteStream(res.locals.destionationPaths[0])
             )
 
             await pipeline(
                 req.files.photos[0].stream,
-                fs.createWriteStream(req.destionationPaths[1])
+                fs.createWriteStream(res.locals.destionationPaths[1])
             )
 
             await pipeline(
                 req.files.photos[1].stream,
-                fs.createWriteStream(req.destionationPaths[2])
+                fs.createWriteStream(res.locals.destionationPaths[2])
             )
         }
 
@@ -87,11 +87,12 @@ let generationDirPath = function(req, res, next){
     if(["4", "5"].includes(req.body.type))
         next();
     else{
-        req.destionationPaths = [
+        res.locals.destionationPaths = [
             "." + req.files.mainImage[0].originalName.split(".")[1],
             "." + req.files.photos[0].originalName.split(".")[1],
             "." + req.files.photos[1].originalName.split(".")[1]
         ];
+
         next();
     }
 }
