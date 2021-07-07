@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany } from "typeorm";
 
-import {DrivingLicense} from "./DrivingLicense";
+import { DrivingLicense } from "./DrivingLicense";
+import { Booking } from "./Booking";
 
 @Entity()
 export class User {
@@ -39,5 +40,8 @@ export class User {
 
 	@OneToOne(() => DrivingLicense, drivingLicense => drivingLicense.user, {cascade : true})
     drivingLicense: DrivingLicense;
+
+	@OneToMany(() => Booking, booking => booking.user)
+    bookings: Booking[];
 
 }
