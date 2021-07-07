@@ -143,7 +143,9 @@ export class StaffController{
             ];
         }
 
-        let httpError = await Promise.resolve(staffService.addNewVehicle(req, res.locals.destionationPaths));
+        let httpError = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths.map(path => {
+            return path.replace("assets", "");
+        })));
 
         if(httpError != undefined)
             return next(createHttpError(httpError.code, httpError.message));
