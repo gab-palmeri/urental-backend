@@ -37,7 +37,7 @@ export class Vehicle {
 	@Column({type: "float"})
     dailyPrice: number;
 
-	@Column({type: "float", default: -1})
+	@Column({type: "float"})
     driverPrice: number;
 
     @OneToMany(() => VehiclePhoto, photo => photo.vehicle, {cascade : true})
