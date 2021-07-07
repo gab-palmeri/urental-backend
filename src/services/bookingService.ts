@@ -10,6 +10,8 @@ export async function checkAvailability(bookingPayload:any): Promise<any> {
 
     try {
 		
+		console.log(bookingPayload);
+
 		var vehicle = await getRepository(Vehicle).findOne({
 			relations: ['bookings'],
 			where: { serialNumber: bookingPayload.serialNumber }
