@@ -87,9 +87,13 @@ export class BookingController{
                 return next(createHttpError(value.httpError.error, value.httpError.message));
 
 			if(!value.availability)
+			{
 				res.status(200).send({
 					"available": value.availability
 				});
+				
+				return;
+			}
 
 			if(req.body.driver == true)
 				Promise.resolve(driverService.checkAvailability(req.body)).then(function(secondValue){

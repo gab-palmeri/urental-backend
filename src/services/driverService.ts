@@ -75,8 +75,6 @@ export async function checkAvailability(bookingPayload:any): Promise<any> {
 
 		var available = drivers.some(driver => {
 
-			console.log("driver: " + driver.name);
-
 			return driver.bookings.every(booking => {
 				var fc1 = new Date(bookingPayload.pickUpDateTime) < booking.pickUpDateTime;
 				var fc2 = new Date(bookingPayload.deliveryDateTime) < booking.pickUpDateTime;
