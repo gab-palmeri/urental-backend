@@ -93,5 +93,6 @@ let generationDirPath = function(req, res, next){
             "." + req.files.photos[1].originalName.split(".")[1]
         ];
         next();
+        console.log("test")
     }
 }
