@@ -37,9 +37,9 @@ let addNewVehicleRoute = (app, staffController) => {
 
     app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
 
-        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(req.dirPath)){
+        if(!["4", "5"].includes(req.body.type) && !fs.existsSync(res.locals.dirPath)){
 
-            fs.mkdirSync(req.dirPath, { recursive: true});
+            fs.mkdirSync(res.locals.dirPath, { recursive: true});
 
             await pipeline(
                 req.files.mainImage[0].stream,
@@ -62,6 +62,8 @@ let addNewVehicleRoute = (app, staffController) => {
 }
 
 let validationPhoto = function(req, res, next){
+
+    console.log(req.files);
 
     if(["4", "5"].includes(req.body.type))
         next();
