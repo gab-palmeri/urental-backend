@@ -1,4 +1,5 @@
 import Joi from "joi";
+import {Column} from "typeorm";
 
 export const vehicleSchema = Joi.object({
 
@@ -36,5 +37,28 @@ export const vehicleSchema = Joi.object({
             "number.min" : "Il type non può essere minore di 0",
             "number.max" : "Il type non può essere maggiore di 5",
             "any.required": "Il type è obbligatorio"
+        }),
+
+    hourlyPrice: Joi.number()
+        .min(0)
+        .required()
+        .messages({
+            "number.min" : "Il hourlyPrice non può essere minore di 0",
+            "any.required": "Il hourlyPrice è obbligatorio"
+        }),
+
+    dailyPrice: Joi.number()
+        .min(0)
+        .required()
+        .messages({
+            "number.min" : "Il dailyPrice non può essere minore di 0",
+            "any.required": "Il dailyPrice è obbligatorio"
+        }),
+
+    driverPrice: Joi.number()
+        .min(0)
+        .messages({
+            "number.min" : "Il driverPrice non può essere minore di 0",
+            "any.required": "Il driverPrice è obbligatorio"
         }),
 })
