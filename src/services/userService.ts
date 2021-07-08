@@ -66,7 +66,40 @@ export async function createUser(userPayload:any, hasDrivingLicense:boolean): Pr
 
 async function sendActivationLink(userEmail:string) {
 
-    Mailer.sendEmail(userEmail);
+    Mailer.sendActivationMail(userEmail);
+
+}
+
+export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
+
+	var pickUpDate = bookingPayload.pickUpDateTime.split('T')[0];
+	var pickUpTime = bookingPayload.pickUpDateTime.split('T')[1];
+	var deliveryDate = bookingPayload.deliveryDateTime.split('T')[0];
+	var deliveryTime = bookingPayload.deliveryDateTime.split('T')[1];
+
+	var mailBody = "Grazie per aver scelto i nostri servizi.\n\n"
+
+	if(bookingPayload.driver == undefined)
+	{
+		
+		mailBody += "Potrai prelevare il tuo mezzo [" + bookingPayload.vehicle.brand + " " + bookingPayload.vehicle.model + 
+		"] giorno " + pickUpDate + " alle ore " + pickUpTime + " in " + bookingPayload.pickUpStall.address + ".\n\n";
+
+		if(pickUpDate == deliveryDate)
+			mailBody += "Ricordati di riconsegnarla entro le ore " + deliveryTime + ", in " + bookingPayload.deliveryStall.address + ".\n";
+		else 
+			mailBody += "Ricordati di riconsegnarla entro giorno " + deliveryDate + " alle ore " + deliveryTime +
+			", in " + bookingPayload.deliveryStall.address + ".\n";
+	}
+	else 
+	{
+		mailBody += "Potrai incontrare " + bookingPayload.driver.name + ", l'autista del tuo mezzo [" + bookingPayload.vehicle.brand + " " + bookingPayload.vehicle.model + 
+		"], giorno " + pickUpDate + " alle ore " + pickUpTime + " in " + bookingPayload.pickUpStall.address + ".\n\n";
+
+		mailBody += "La corsa terminerà alle ore ore " + deliveryTime + ", in " + bookingPayload.deliveryStall.address + ".\n";
+	}
+
+    Mailer.sendBookingMail(userEmail, mailBody);
 
 }
 
