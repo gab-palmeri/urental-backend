@@ -89,7 +89,7 @@ export async function getVehiclePrices(serialNumber: string): Promise<any> {
 	try {
 
         const vehiclePrices = await getRepository(Vehicle).findOne({
-            select: ["serialNumber", "hourlyPrice", "dailyPrice", "driverPrice"],
+            select: ["serialNumber", "type", "hourlyPrice", "dailyPrice", "driverPrice"],
             where: { serialNumber: serialNumber}
         });
 
