@@ -2,6 +2,7 @@ import multer from "multer";
 import createHttpError from "http-errors";
 
 import * as fs from "fs";
+
 import { promisify } from "util";
 import stream from "stream";
 
@@ -11,22 +12,22 @@ export class StaffRoutes{
 
     public static staffController: StaffController = new StaffController();
 
-    public static setRoutes(app): void{
+    public static setRoutes(app, JWT_MIDDLEWARE): void{
 
         app.route("/staffs/auth")
             .post(this.staffController.auth)
 
         app.route("/staffs/register")
-            .post(this.staffController.create)
+            .post(JWT_MIDDLEWARE, this.staffController.create)
 
         app.route("/staffs/createDriver")
-            .post(this.staffController.createDriver)
+            .post(JWT_MIDDLEWARE, this.staffController.createDriver)
 
-        addNewVehicleRoute(app, StaffRoutes.staffController);
+        addNewVehicleRoute(app, StaffRoutes.staffController, JWT_MIDDLEWARE);
     }
 }
 
-let addNewVehicleRoute = (app, staffController) => {
+let addNewVehicleRoute = (app, staffController, JWT_MIDDLEWARE) => {
 
     const upload = multer().fields([
         { name: "mainImage"},
@@ -34,8 +35,7 @@ let addNewVehicleRoute = (app, staffController) => {
     ]);
     const pipeline = promisify(stream.pipeline);
 
-
-    app.post("/staffs/addNewVehicle", upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
+    app.post("/staffs/addNewVehicle", JWT_MIDDLEWARE, upload, validationPhoto, generationDirPath, staffController.addNewVehicle, async (req, res, next) => {
 
         if(!["4", "5"].includes(req.body.type) && !fs.existsSync(req.dirPath)){
 

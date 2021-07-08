@@ -6,8 +6,9 @@ export class VehicleRoutes
     public static vehicleController: VehicleController = new VehicleController();
 
     //DECIDO QUALE METODO DEL CONTROLLER USARE PER OGNI /PATH
-    public static setRoutes(app): void
+    public static setRoutes(app, JWT_MIDDLEWARE): void
     {
+	
         app.route('/vehicles/preview')
             .get(this.vehicleController.getPreview)
 
@@ -18,7 +19,7 @@ export class VehicleRoutes
             .get(this.vehicleController.getMotorbikes)
         
 		app.route('/vehicles/:serialNumber/prices')
-			.get(this.vehicleController.getVehiclePrices)
+			.get(JWT_MIDDLEWARE, this.vehicleController.getVehiclePrices)
 
         app.route('/vehicles/:brand-:model')
             .get(this.vehicleController.getVehicleOptions)

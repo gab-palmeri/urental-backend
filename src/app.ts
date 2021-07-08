@@ -4,9 +4,6 @@ import { Router } from "./router";
 import { Mailer } from "./mailer";
 import { createConnection } from "typeorm";
 import cors from "cors";
-import jwt from "express-jwt";
-import fs from 'fs';
-import { pathToRegexp } from 'path-to-regexp';
 
 class App {
 
@@ -61,25 +58,6 @@ class App {
 
         //CARICAMENTO DELLE OPZIONI CORS
         this.app.use(cors(options));
-
-        //UTILIZZA IL JWT TRANNE SE L'UTENTE SI DEVE AUTENTICARE (MIDDLEWARE)
-        const RSA_PUBLIC_KEY = fs.readFileSync('./keys/public.key');
-        this.app.use(jwt({secret: RSA_PUBLIC_KEY, algorithms: ["RS256"]}).unless(
-            {
-                path: [
-                    "/users/auth",
-                    "/users/register",
-                    "/users/activate",
-                    "/staffs/auth",
-                    "/drivers/auth",
-                    "/vehicles/preview",
-                    "/vehicles/cars",
-                    "/vehicles/motorbikes",
-                    pathToRegexp("/vehicles/:brand-:model")
-                ]
-            }
-        ));
-
     }
 
 }
