@@ -56,7 +56,7 @@ export async function getBookingStalls(pickUpStall:number, deliveryStall:number)
 			where: { id: In([pickUpStall, deliveryStall])}
 		});
 		
-		if(stalls.length == 2)
+		if(pickUpStall == deliveryStall || stalls.length == 2)
 			return { 
 				httpError: undefined, 
 				stalls: {
