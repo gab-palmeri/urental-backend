@@ -62,8 +62,10 @@ export async function createBooking(pickUpDateTime:Date, pickUpStall:Stall, deli
 
 		await getRepository(Booking).save(booking);
 
+		return {httpError: undefined, booking: booking};
+
 	} catch (error) {
 		
-		console.log(error);
+		return {httpError: {code:500, message:"Errore interno al server"}, booking: undefined};
 	}
 }

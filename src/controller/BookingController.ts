@@ -55,6 +55,8 @@ export class BookingController{
 			var driver = undefined;
 			if(response[2])
 				driver = response[2].driver;
+			
+			var userId = userService.decodeToken(req.headers.authorization.split(' ')[1])['id']
 
 			Promise.resolve(
 				bookingService.createBooking(
@@ -63,12 +65,14 @@ export class BookingController{
 					req.body.booking.deliveryDateTime, 
 					response[0].stalls.deliveryStall, 
 					response[1].vehicle,
-					userService.decodeToken(req.headers.authorization.split(' ')[1])['id'], 
+					userId, 
 					req.body.booking.total,
 					driver
 				)
-			).then(value => {
+			).then(async value => {
 				
+				userService.sendBookingInfos((await userService.getProfile(userId)).profile.email, value.booking);
+
 				res.status(200).send();
 
 			});
