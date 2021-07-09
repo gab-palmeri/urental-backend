@@ -69,3 +69,22 @@ export async function createBooking(pickUpDateTime:Date, pickUpStall:Stall, deli
 		return {httpError: {code:500, message:"Errore interno al server"}, booking: undefined};
 	}
 }
+
+export async function getBookingBy(bookingID: number): Promise<any>{
+
+	try {
+		const booking = await getRepository(Booking).findOne({
+			relations: ["status"],
+			where: { id: bookingID}
+		});
+
+		if(booking != undefined)
+			return { httpError: undefined, booking: booking}
+		else
+			return { httpError: {code: 404, message: "Booking non trovato"}, booking: undefined};
+
+	}
+	catch (err) {
+		return {httpError: {code: 500, message:"Errore interno al server"}, booking: undefined};
+	}
+}

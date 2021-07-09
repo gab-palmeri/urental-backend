@@ -6,6 +6,7 @@ import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 
 import {Staff} from "../entity/Staff";
+
 import {Vehicle} from "../entity/Vehicle";
 import {GasCar} from "../entity/GasCar";
 import {ElectricCar} from "../entity/ElectricCar";
@@ -174,6 +175,25 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
     }
 
     return undefined;
+}
+
+
+export async function getStaffBy(staffID: number): Promise<any> {
+
+    try {
+        const staff = await getRepository(Staff).findOne({
+            where: { id: staffID}
+        });
+
+        if(staff != undefined)
+            return { httpError: undefined, staff: staff}
+        else
+            return { httpError: {code: 404, message: "Staff non trovato"}, staff: undefined};
+
+    }
+    catch (err) {
+        return {httpError: {code: 500, message:"Errore interno al server"}, staff: undefined};
+    }
 }
 
 function converToCapitalizedCase(words: string): string {
