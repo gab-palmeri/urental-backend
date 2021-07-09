@@ -34,11 +34,11 @@ export async function createDriver(driverPayload: any) : Promise<any>{
 
     let driver = new Driver();
 
-    driver.name = driverPayload.body.name;
-    driver.surname = driverPayload.body.surname;
+    driver.name = converToCapitalizedCase(driverPayload.body.name);
+    driver.surname = converToCapitalizedCase(driverPayload.body.surname);
     driver.fiscalCode = driverPayload.body.fiscalCode;
     driver.birthDate = driverPayload.body.birthDate;
-    driver.birthPlace = driverPayload.body.birthPlace;
+    driver.birthPlace = converToCapitalizedCase(driverPayload.body.birthPlace);
     driver.email = driverPayload.body.email;
     driver.password = bcrypt.hashSync(driverPayload.body.password, 8);
 
@@ -124,4 +124,14 @@ export async function getAvailableDriver(pickUpDateTime: string, deliveryDateTim
          return {httpError: {code:500, message:"Errore interno al server"}, driver:undefined};
     }
 
+}
+
+function converToCapitalizedCase(words: string): string {
+	
+	const wordsArray = words.toLowerCase().split(" ");
+
+    for (var i = 0; i < wordsArray.length; i++)
+        wordsArray[i] = wordsArray[i].charAt(0).toUpperCase() + wordsArray[i].slice(1);
+
+    return wordsArray.join(" ");
 }
