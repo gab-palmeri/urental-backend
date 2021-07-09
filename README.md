@@ -33,5 +33,7 @@ Create a .env file in the root folder:
     SERVER_PORT=yourserverport
     MAILER_ADDRESS=youremail@provider.it
     MAILER_PASS=youremailpass
+    CLIENT_HOST=yourclientip
+    CLIENT_PORT=yourclientport
 
 This file will be used to rapidly access your environment infos
