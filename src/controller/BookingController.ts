@@ -16,6 +16,10 @@ export class BookingController{
 
     public async createBooking(req: Request, res: Response, next: any){
 
+		const userToken = userService.decodeToken(req.headers.authorization.split(' ')[1]);
+		if(userToken['role'] != 0)
+			return next(createHttpError(401, "Devi avere un account utente per effettuare una prenotazione"));
+
 		//PARTE VALIDAZIONE
 		var { error, value } = creditCardSchema.validate(req.body.creditCard);
 
@@ -56,7 +60,7 @@ export class BookingController{
 			if(response[2])
 				driver = response[2].driver;
 			
-			var userId = userService.decodeToken(req.headers.authorization.split(' ')[1])['id']
+			var userId = userToken['id']
 
 			Promise.resolve(
 				bookingService.createBooking(
