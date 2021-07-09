@@ -17,11 +17,8 @@ export class StaffRoutes{
         app.route("/staffs/auth")
             .post(this.staffController.auth)
 
-        app.route("/staffs/register")
+        app.route("/staffs")
             .post(JWT_MIDDLEWARE, this.staffController.create)
-
-        app.route("/staffs/createDriver")
-            .post(JWT_MIDDLEWARE, this.staffController.createDriver)
 
         addNewVehicleRoute(app, StaffRoutes.staffController, JWT_MIDDLEWARE);
     }

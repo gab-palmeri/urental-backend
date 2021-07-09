@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import createHttpError from "http-errors";
 
-import {
-    staffAndDriverSchema as driverSchema,
-    staffAndDriverSchema as staffSchema
-} from "../schemas/StaffAndDriverSchema";
+import { staffAndDriverSchema as staffSchema } from "../schemas/StaffAndDriverSchema";
 import { vehicleSchema } from "../schemas/VehicleSchema"
 import { gasCarSchema } from "../schemas/GasCarSchema";
 import { electricCarSchema } from "../schemas/ElectricCarSchema"
@@ -16,7 +13,6 @@ import {
 } from "../schemas/BikeAndScooterSchema";
 
 import * as staffService from "../services/staffService";
-import * as driverService from "../services/driverService";
 import fs from "fs";
 
 
@@ -46,22 +42,6 @@ export class StaffController{
             return next(createHttpError(400, error.details[0].message));
 
         Promise.resolve(staffService.createStaff(req)).then(function(httpError){
-
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
-
-            res.status(200).send();
-        });
-    }
-
-    public async createDriver(req: Request, res: Response, next: any){
-
-        let { error, value } = driverSchema.validate(req.body, {allowUnknown: true});
-
-        if(error != undefined)
-            return next(createHttpError(400, error.details[0].message));
-
-        Promise.resolve(driverService.createDriver(req)).then(function(httpError){
 
             if(httpError != undefined)
                 return next(createHttpError(httpError.code, httpError.message));
