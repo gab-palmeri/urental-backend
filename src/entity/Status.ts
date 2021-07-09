@@ -1,7 +1,6 @@
 import {Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 
 import { Staff } from "./Staff"
-import { StatusPhoto } from "./StatusPhoto";
 
 @Entity()
 
@@ -20,7 +19,4 @@ export class Status{
     @OneToOne(() => Staff, staff => staff.id)
     @JoinColumn()
     staffDelivery: Staff;
-
-    /*@OneToMany(() => StatusPhoto, StatusPhoto => StatusPhoto.status, {cascade : true})
-    photos: StatusPhoto[];*/
 }
