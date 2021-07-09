@@ -20,7 +20,7 @@ export class Router
         UserRoutes.setRoutes(app, JWT_MIDDLEWARE);
         VehicleRoutes.setRoutes(app, JWT_MIDDLEWARE);
         StaffRoutes.setRoutes(app, JWT_MIDDLEWARE);
-        DriverRoutes.setRoutes(app);
+        DriverRoutes.setRoutes(app, JWT_MIDDLEWARE);
 		DrivingLicenseRoutes.setRoutes(app, JWT_MIDDLEWARE);
 		StallRoutes.setRoutes(app, JWT_MIDDLEWARE);
 		BookingRoutes.setRoutes(app, JWT_MIDDLEWARE);

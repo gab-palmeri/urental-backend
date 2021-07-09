@@ -14,7 +14,7 @@ export class UserRoutes
         app.route('/users/register')
             .post(this.userController.create)
         app.route('/users/activate')
-            .get(this.userController.activate)
+            .post(this.userController.activate)
         app.route('/users/changePin')
             .put(JWT_MIDDLEWARE, this.userController.changePin)
 		app.route('/users/profile')

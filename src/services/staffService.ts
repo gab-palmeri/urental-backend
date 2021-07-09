@@ -43,11 +43,11 @@ export async function createStaff(staffPayload: any) : Promise<any>{
 
     let staff = new Staff();
 
-    staff.name = staffPayload.body.name;
-    staff.surname = staffPayload.body.surname;
+    staff.name = converToCapitalizedCase(staffPayload.body.name);
+    staff.surname = converToCapitalizedCase(staffPayload.body.surname);
     staff.fiscalCode = staffPayload.body.fiscalCode;
     staff.birthDate = staffPayload.body.birthDate;
-    staff.birthPlace = staffPayload.body.birthPlace;
+    staff.birthPlace = converToCapitalizedCase(staffPayload.body.birthPlace);
     staff.email = staffPayload.body.email;
     staff.password = bcrypt.hashSync(staffPayload.body.password, 8);
 
@@ -194,4 +194,14 @@ export async function getStaffBy(staffID: number): Promise<any> {
     catch (err) {
         return {httpError: {code: 500, message:"Errore interno al server"}, staff: undefined};
     }
+}
+
+function converToCapitalizedCase(words: string): string {
+	
+	const wordsArray = words.toLowerCase().split(" ");
+
+    for (var i = 0; i < wordsArray.length; i++)
+        wordsArray[i] = wordsArray[i].charAt(0).toUpperCase() + wordsArray[i].slice(1);
+
+    return wordsArray.join(" ");
 }

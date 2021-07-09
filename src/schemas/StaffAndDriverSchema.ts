@@ -19,7 +19,7 @@ export const staffAndDriverSchema = Joi.object({
         }),
 
     surname: Joi.string()
-        .pattern(new RegExp('^[A-Z][a-z]+([ ][A-Z][a-z]+)*$'))
+        .pattern(new RegExp('^[A-Za-z]{2,}([ ][A-Za-z]{2,})*$'))
         .min(3)
         .max(20)
         .required()
@@ -52,7 +52,7 @@ export const staffAndDriverSchema = Joi.object({
         }),
 
     birthPlace: Joi.string()
-        .pattern(new RegExp('^[A-Z][a-z]{2,}([ ][A-Z][a-z]{2,})*$'))
+        .pattern(new RegExp('^[A-Za-z]{2,}([ ][A-Za-z]{2,})*$'))
         .min(3)
         .max(30)
         .required()

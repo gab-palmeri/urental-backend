@@ -64,10 +64,10 @@ export class UserController
 
     public async activate(req: Request, res: Response, next:any)
     {
-        if(req.query.token != undefined)
+        if(req.body.code != undefined)
         {
             var symmetricKey  = fs.readFileSync('./keys/symmetric.key', 'utf8');
-            var token = req.query.token.toString().replaceAll('xMl3Jk', '+' ).replaceAll('Por21Ld', '/').replaceAll('Ml32', '=');
+            var token = req.body.code.toString().replaceAll('xMl3Jk', '+' ).replaceAll('Por21Ld', '/').replaceAll('Ml32', '=');
             var userEmail = CryptoJS.AES.decrypt(token, symmetricKey).toString(CryptoJS.enc.Utf8);
 
             Promise.resolve(userService.activateUser(userEmail)).then(function(httpError) {

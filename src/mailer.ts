@@ -28,7 +28,7 @@ export class Mailer
     	});
 	}
 
-    static async sendEmail(userEmail: string)
+	static async sendActivationMail(userEmail: string)
     {
         var symmetricKey  = fs.readFileSync('./keys/symmetric.key', 'utf8');
         var activationToken = CryptoJS.AES.encrypt(userEmail, symmetricKey).toString().replaceAll('+','xMl3Jk').replaceAll('/','Por21Ld').replaceAll('=','Ml32');
@@ -37,7 +37,7 @@ export class Mailer
             from: Mailer.user,
             to: userEmail,
             subject: 'Attiva il tuo account URental',
-            text: 'http://' + process.env.SERVER_HOST + ':' + process.env.SERVER_PORT + '/users/activate?token=' + activationToken
+            text: 'http://' + process.env.CLIENT_HOST + ':' + process.env.CLIENT_PORT + '/activate/' + activationToken
         };
 
         Mailer.transporter.sendMail(mailOptions, function(error, info){
@@ -45,4 +45,19 @@ export class Mailer
                 console.log(error);
         });
     }
+
+	static async sendBookingMail(userEmail: string, message:string) {
+		
+		var mailOptions = {
+			from: Mailer.user,
+			to: userEmail,
+			subject: 'Il tuo noleggio su urental',
+			text: message
+		};
+
+		Mailer.transporter.sendMail(mailOptions, function (error, info) {
+			if (error)
+				console.log(error);
+		});
+	}
 }
