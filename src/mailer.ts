@@ -37,7 +37,7 @@ export class Mailer
             from: Mailer.user,
             to: userEmail,
             subject: 'Attiva il tuo account URental',
-            text: 'http://' + process.env.SERVER_HOST + ':' + process.env.SERVER_PORT + '/users/activate?token=' + activationToken
+            text: 'http://' + process.env.CLIENT_HOST + ':' + process.env.CLIENT_PORT + '/activate/' + activationToken
         };
 
         Mailer.transporter.sendMail(mailOptions, function(error, info){
