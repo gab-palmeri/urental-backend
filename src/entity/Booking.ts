@@ -6,7 +6,7 @@ import { User } from './User';
 
 import { Payment } from './Payment';
 import { Stall } from './Stall';
-//import { Status } from './Status';
+import { Status } from './Status';
 
 @Entity()
 export class Booking {
@@ -36,6 +36,10 @@ export class Booking {
 	@OneToOne(() => Payment, payment => payment.booking, {nullable:false, cascade : true})
     @JoinColumn()
 	payment: Payment;
+
+    @OneToOne(() => Status, status => status.id, {cascade: true})
+    @JoinColumn()
+    status: Status;
 
 	//DATA
 

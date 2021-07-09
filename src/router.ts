@@ -5,6 +5,7 @@ import { DriverRoutes } from "./routes/DriverRoutes";
 import { DrivingLicenseRoutes } from "./routes/DrivingLicenseRoutes";
 import { StallRoutes } from "./routes/StallRoutes";
 import { BookingRoutes } from "./routes/BookingRoutes";
+import { StatusRoutes } from "./routes/StatusRoutes";
 
 import jwt from "express-jwt";
 import fs from 'fs';
@@ -23,5 +24,6 @@ export class Router
 		DrivingLicenseRoutes.setRoutes(app, JWT_MIDDLEWARE);
 		StallRoutes.setRoutes(app, JWT_MIDDLEWARE);
 		BookingRoutes.setRoutes(app, JWT_MIDDLEWARE);
+		StatusRoutes.setRoutes(app, JWT_MIDDLEWARE);
     }
 }
