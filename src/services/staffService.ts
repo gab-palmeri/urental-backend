@@ -65,7 +65,7 @@ export async function createStaff(staffPayload: any) : Promise<any>{
     return undefined;
 }
 
-function verifyRoleFromToken(token: any) : object{
+export function verifyRoleFromToken(token: any) : any{
 
     let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
     let decodedToken = jwt.verify(token, publicKEY);

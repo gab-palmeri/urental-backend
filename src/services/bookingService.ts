@@ -1,11 +1,13 @@
+import { getRepository, MoreThanOrEqual } from "typeorm";
+
 import { Driver } from "../entity/Driver";
 import { Payment } from "../entity/Payment";
 import { Stall } from "../entity/Stall";
-import { getRepository } from "typeorm";
 
 import { Booking } from '../entity/Booking';
 import { Vehicle } from '../entity/Vehicle';
 import CryptoJS from 'crypto-js';
+
 export async function checkAvailability(bookingPayload:any): Promise<any> {
 
     try {
@@ -87,4 +89,29 @@ export async function getBookingBy(bookingID: number): Promise<any>{
 	catch (err) {
 		return {httpError: {code: 500, message:"Errore interno al server"}, booking: undefined};
 	}
+}
+
+export async function getActiveBookings(): Promise<any> {
+
+	try {
+
+		const activeBookings = await getRepository(Booking).find({
+			select: ["id", "pickUpDateTime", "deliveryDateTime", "status", "vehicle"],
+			relations: ["status", "vehicle"],
+			where: {
+				pickUpDateTime: MoreThanOrEqual(new Date()),
+				deliveryDateTime: MoreThanOrEqual(new Date())
+			}
+		});
+
+		return {httpError: undefined, activeBookings: activeBookings};
+
+	} catch (error) {
+		console.log(error);
+		return {httpError: {code: 500, message:"Errore interno al server"}, activeBookings: undefined};
+		
+	}
+
+	
+
 }

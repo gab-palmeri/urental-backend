@@ -11,5 +11,8 @@ export class BookingRoutes{
 		
 		app.route("/booking")
 			.post(JWT_MIDDLEWARE, this.bookingController.createBooking)
+
+		app.route("/booking/active")
+			.get(JWT_MIDDLEWARE, this.bookingController.getActiveBookings)
     }
 }

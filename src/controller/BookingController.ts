@@ -4,6 +4,7 @@ import createHttpError from "http-errors";
 import * as bookingService from '../services/bookingService';
 import * as driverService from '../services/driverService';
 import * as stallService from '../services/stallService';
+import * as staffService from '../services/staffService';
 import * as vehicleService from '../services/vehicleService';
 import * as userService from '../services/userService';
 
@@ -123,7 +124,22 @@ export class BookingController{
 			
             
         });
+	}
 
+	public async getActiveBookings(req: Request, res: Response, next: any){
+
+		const isNotStaff = staffService.verifyRoleFromToken(req.headers.authorization.split(" ")[1]);
+
+		if(isNotStaff != undefined)
+			return next(createHttpError(isNotStaff.code, isNotStaff.message));
+
+		Promise.resolve(bookingService.getActiveBookings()).then(value => {
+
+			if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.error, value.httpError.message));
+
+			res.status(200).send(value.activeBookings);
+		});
 
 	}
 }
