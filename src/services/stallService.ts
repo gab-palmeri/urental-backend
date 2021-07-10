@@ -13,7 +13,7 @@ export async function getStalls(): Promise<any> {
 
 	} catch (error)
 	{
-		return { code:500, message:"Errore interno al server" };
+		return {httpError: {code:500, message:"Errore interno al server" }};
 	}
 }
 
@@ -36,14 +36,14 @@ export async function createStall(stallPayload:any): Promise<any> {
 
         await getRepository(Stall).save(stall);
 
-        return undefined;
+        return {httpError: undefined};
 
     } catch(err)
     {
         if(err.code == "ER_DUP_ENTRY")
-            return {code:400, message:"Stallo già esistente"};
+            return {httpError: {code:400, message:"Stallo già esistente"}};
         else
-            return {code:500, message:"Errore interno al server"};
+            return {httpError: {code:500, message:"Errore interno al server"}};
     }
 
 }
@@ -72,7 +72,7 @@ export async function getBookingStalls(pickUpStall:number, deliveryStall:number)
 
 	} catch (err) {
 		console.log(err);
-		return {httpError: {code:500, message:"Errore interno al server"}};
+		return {httpError: {code:500, message:"Errore interno al server"}, stalls: undefined};
 
 	}
 }

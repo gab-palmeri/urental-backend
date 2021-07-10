@@ -20,7 +20,7 @@ export async function editOrCreate(userId:number,licensePayload:any){
 		await getRepository(DrivingLicense).save(drivingLicense);
 
 	} catch (error) {
-		return {code:500, message:"Errore interno al server"};
+		return {httpError: {code:500, message:"Errore interno al server"}};
 	}
 
 }
@@ -32,7 +32,7 @@ export async function deleteLicense(userId:number){
 		await getRepository(DrivingLicense).delete({"user":userId})
 
 	} catch (error) {
-		return {code:500, message:"Errore interno al server"};
+		return {httpError: {code:500, message:"Errore interno al server"}};
 	}
 
 }

@@ -22,9 +22,11 @@ export async function editOrCreate(booking: Booking, statusPayload: any){
 
         await getRepository(Booking).save(booking);
 
+		return {httpError: undefined}
+
     } catch (error) {
         console.log(error);
-        return {code: 500, message: "Errore interno al server"};
+        return {httpError: {code: 500, message: "Errore interno al server"}};
     }
 
 }

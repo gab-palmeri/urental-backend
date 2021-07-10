@@ -41,10 +41,10 @@ export class StaffController{
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
-        Promise.resolve(staffService.createStaff(req)).then(function(httpError){
+        Promise.resolve(staffService.createStaff(req)).then(function(value){
 
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
 
             res.status(200).send();
         });
@@ -126,12 +126,12 @@ export class StaffController{
             ];
         }
 
-        let httpError = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths.map(path => {
+        let valueResponse = await Promise.resolve(staffService.addNewVehicle(req, req.destionationPaths.map(path => {
             return path.replace("assets", "");
         })));
 
-        if(httpError != undefined)
-            return next(createHttpError(httpError.code, httpError.message));
+        if(valueResponse.httpError != undefined)
+            return next(createHttpError(valueResponse.httpError.code, valueResponse.httpError.message));
         else
             next();
     }

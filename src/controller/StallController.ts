@@ -10,7 +10,7 @@ export class StallController {
 
  		Promise.resolve(stallService.getStalls()).then(function(value) {
 
-            if(value.code == undefined)
+            if(value.httpError == undefined)
                 res.status(200).send(value);
             else
                 return next(createHttpError(value.httpError.code, value.httpError.message));
@@ -25,10 +25,10 @@ export class StallController {
         if(error != undefined)
             return next(createHttpError(400, error.details[0].message));
 
-        Promise.resolve(stallService.createStall(req)).then(function(httpError){
+        Promise.resolve(stallService.createStall(req)).then(function(value){
 
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
 
             res.status(200).send();
         });

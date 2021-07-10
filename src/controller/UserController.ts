@@ -52,9 +52,9 @@ export class UserController
 
 		req.body.fiscalCode = req.body.fiscalCode.toUpperCase();
 
-        Promise.resolve(userService.createUser(req.body, hasDrivingLicense)).then(function(httpError) {
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+        Promise.resolve(userService.createUser(req.body, hasDrivingLicense)).then(function(value) {
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
             else
                 res.status(200).send();
         });
@@ -70,9 +70,9 @@ export class UserController
             var token = req.body.code.toString().replaceAll('xMl3Jk', '+' ).replaceAll('Por21Ld', '/').replaceAll('Ml32', '=');
             var userEmail = CryptoJS.AES.decrypt(token, symmetricKey).toString(CryptoJS.enc.Utf8);
 
-            Promise.resolve(userService.activateUser(userEmail)).then(function(httpError) {
-                if(httpError != undefined)
-                    return next(createHttpError(httpError.code, httpError.message));
+            Promise.resolve(userService.activateUser(userEmail)).then(function(value) {
+                if(value.httpError != undefined)
+                    return next(createHttpError(value.httpError.code, value.httpError.message));
                 else
                     res.status(200).send();
             });
@@ -107,9 +107,9 @@ export class UserController
         var publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
         var decoded = jwt.verify(token, publicKEY);
 
-        Promise.resolve(userService.changePin(decoded['id'], req.body.newPin)).then(function(httpError) {
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+        Promise.resolve(userService.changePin(decoded['id'], req.body.newPin)).then(function(value) {
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
             else
                 res.status(200).send();
         });
