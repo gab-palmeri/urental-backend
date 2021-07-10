@@ -89,7 +89,7 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
 	let isStaff = tokenService.isStaff(token);
 
     if(!isStaff)
-        return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
+        return {httpError: {code: 401, message: "Non hai i permessi per effettuare questa richiesta"}};
 
     let vehicle = new Vehicle();
     vehicle.brand = addNewVehiclePayload.body.brand;
@@ -177,11 +177,14 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
 
         if(err.code == "ER_DUP_ENTRY")
             return {httpError: {code: 400, message: "Vehicle già esistente."}};
-        else
+        else{
+            console.log(err);
             return {httpError: {code: 500, message: "Errore interno al server"}};
+        }
+
     }
 
-    return undefined;
+    return {httpError: undefined};
 }
 
 
