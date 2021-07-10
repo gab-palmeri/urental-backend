@@ -56,7 +56,9 @@ export const gasCarSchema = Joi.object({
                 "any.required" : "La trunkSize è obbligatoria"
             }),
 
-        shift: Joi.boolean()
+        shift: Joi.number()
+            .min(0)
+            .max(1)
             .required()
             .messages({
                 "any.required" : "La shift è obbligatoria"

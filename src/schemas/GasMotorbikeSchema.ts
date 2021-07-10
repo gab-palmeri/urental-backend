@@ -42,7 +42,9 @@ export const gasMotorbikeSchema = Joi.object({
                 "any.required" : "La consumption è obbligatoria"
             }),
 
-        shift: Joi.boolean()
+        shift: Joi.number()
+            .min(0)
+            .max(1)
             .required()
             .messages({
                 "any.required" : "La shift è obbligatoria"
