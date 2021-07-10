@@ -6,24 +6,21 @@ import { statusSchema, statusUpdateSchema } from "../schemas/StatusSchema";
 
 import * as statusService from '../services/statusService';
 import * as staffService from "../services/staffService";
+import * as tokenService from '../services/tokenService';
+
 import { getBookingBy } from "../services/bookingService";
-import fs from "fs";
-import * as jwt from "jsonwebtoken";
 
 export class StatusController {
 
     public async editOrCreate(req: Request, res: Response, next: any) {
 
-        let publicKEY = fs.readFileSync('./keys/public.key', 'utf8');
-        let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
+		let decodedToken = tokenService.decodeToken(req.headers.authorization.split(" ")[1])
 
         if (decodedToken["role"] != 2)
             return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
 
-
         if (req.body.bookingID == undefined)
             return next(createHttpError(400, "bookingID non presente"));
-
 
         let {httpError, booking} = await Promise.resolve(getBookingBy(req.body.bookingID));
         if (httpError != undefined)

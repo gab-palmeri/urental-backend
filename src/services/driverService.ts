@@ -6,6 +6,7 @@ import * as fs from "fs";
 import * as jwt from "jsonwebtoken";
 
 import {Driver} from "../entity/Driver";
+import * as tokenService from "./tokenService";
 
 export async function authDriver(email: string, password: string) : Promise<any>{
 
@@ -27,10 +28,10 @@ export async function authDriver(email: string, password: string) : Promise<any>
 export async function createDriver(driverPayload: any) : Promise<any>{
 
     const token = driverPayload.headers.authorization.split(" ")[1];
-    let httpError = verifyRoleFromToken(token);
+    let isStaff = tokenService.isStaff(token);
 
-    if(httpError != undefined)
-        return httpError;
+    if(!isStaff)
+        return {httpError: {code: 401, message: "Non hai i permessi per effettuare questa richiesta"}};
 
     let driver = new Driver();
 
@@ -52,17 +53,6 @@ export async function createDriver(driverPayload: any) : Promise<any>{
         else
             return {httpError: {code: 500, message: "Errore interno al server"}};
     }
-
-    return undefined;
-}
-
-function verifyRoleFromToken(token: any) : object{
-
-    let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-    let decodedToken = jwt.verify(token, publicKEY);
-
-    if(decodedToken["role"] != 2)
-        return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
 
     return undefined;
 }

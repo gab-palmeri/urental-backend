@@ -4,9 +4,9 @@ import createHttpError from "http-errors";
 import * as bookingService from '../services/bookingService';
 import * as driverService from '../services/driverService';
 import * as stallService from '../services/stallService';
-import * as staffService from '../services/staffService';
 import * as vehicleService from '../services/vehicleService';
 import * as userService from '../services/userService';
+import * as tokenService from '../services/tokenService';
 
 import { creditCardSchema } from "../schemas/CreditCardSchema";
 import { bookingSchema } from "../schemas/BookingSchema";
@@ -17,7 +17,8 @@ export class BookingController{
 
     public async createBooking(req: Request, res: Response, next: any){
 
-		const userToken = userService.decodeToken(req.headers.authorization.split(' ')[1]);
+		const userToken = tokenService.decodeToken(req.headers.authorization.split(' ')[1])
+
 		if(userToken['role'] != 0)
 			return next(createHttpError(401, "Devi avere un account utente per effettuare una prenotazione"));
 
@@ -128,10 +129,10 @@ export class BookingController{
 
 	public async getActiveBookings(req: Request, res: Response, next: any){
 
-		const isNotStaff = staffService.verifyRoleFromToken(req.headers.authorization.split(" ")[1]);
+		const isStaff = tokenService.isStaff(req.headers.authorization.split(" ")[1]);
 
-		if(isNotStaff != undefined)
-			return next(createHttpError(isNotStaff.code, isNotStaff.message));
+		if(!isStaff)
+			return next(createHttpError(401, "Non hai i permessi per effettuare questa richiesta"));
 
 		Promise.resolve(bookingService.getActiveBookings()).then(value => {
 

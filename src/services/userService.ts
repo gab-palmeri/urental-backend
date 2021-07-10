@@ -161,12 +161,6 @@ export async function getProfile(userId:number): Promise<any> {
     }
 }
 
-export function decodeToken(userToken:any) {
-
-	var publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-	return jwt.verify(userToken, publicKEY);
-}
-
 export async function hasDrivingLicense(userId:number): Promise<any>{
 
 	

@@ -16,6 +16,8 @@ import {Bike} from "../entity/Bike";
 import {Scooter} from "../entity/Scooter";
 import {VehiclePhoto} from "../entity/VehiclePhoto";
 
+import * as tokenService from "./tokenService";
+
 export async function authStaff(email: string, password: string) : Promise<any>{
 
 	var staff;
@@ -52,10 +54,10 @@ export async function authStaff(email: string, password: string) : Promise<any>{
 export async function createStaff(staffPayload: any) : Promise<any>{
 
     const token = staffPayload.headers.authorization.split(" ")[1];
-    let httpError = verifyRoleFromToken(token);
+    let isStaff = tokenService.isStaff(token);
 
-    if(httpError != undefined)
-        return httpError;
+    if(!isStaff)
+        return {httpError: {code: 401, message: "Non hai i permessi per effettuare questa richiesta"}};
 
     let staff = new Staff();
 
@@ -81,24 +83,13 @@ export async function createStaff(staffPayload: any) : Promise<any>{
     return undefined;
 }
 
-export function verifyRoleFromToken(token: any) : any{
-
-    let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-    let decodedToken = jwt.verify(token, publicKEY);
-
-    if(decodedToken["role"] != 2)
-        return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
-
-    return undefined;
-}
-
 export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : Promise<any>{
 
     const token = addNewVehiclePayload.headers.authorization.split(" ")[1];
-    let httpError = verifyRoleFromToken(token);
+	let isStaff = tokenService.isStaff(token);
 
-    if(httpError != undefined)
-        return httpError;
+    if(!isStaff)
+        return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
 
     let vehicle = new Vehicle();
     vehicle.brand = addNewVehiclePayload.body.brand;
