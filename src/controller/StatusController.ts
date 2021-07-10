@@ -51,10 +51,10 @@ export class StatusController {
             return next(createHttpError(400, response.error.details[0].message));
 
 
-        Promise.resolve(statusService.editOrCreate(booking, req.body)).then(function (httpError) {
+        Promise.resolve(statusService.editOrCreate(booking, req.body)).then(function (value) {
 
-            if (httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+            if (value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
 
             res.status(200).send();
         });

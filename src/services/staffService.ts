@@ -18,12 +18,28 @@ import {VehiclePhoto} from "../entity/VehiclePhoto";
 
 export async function authStaff(email: string, password: string) : Promise<any>{
 
-    const staff = await getRepository(Staff).findOne({where: {"email": email}})
+	var staff;
+
+	try {
+
+		 staff = await getRepository(Staff).findOne({where: {"email": email}})
+	} catch (error) {
+		
+		return {httpError: {code: 500, message: "Errore interno al server"}, token: undefined};
+	}
 
     if(staff == null || !bcrypt.compareSync(password, staff.password))
         return {httpError: {code: 400, message: "Email o password invalidi"}, token: undefined};
 
-    let privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
+	let privateKEY;
+
+	try {
+
+		privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
+	} catch (error) {
+
+		return {httpError: {code: 500, message: "Errore interno al server"}, token: undefined};
+	}
 
     let token = jwt.sign({
         "id": staff.id,
@@ -57,9 +73,9 @@ export async function createStaff(staffPayload: any) : Promise<any>{
     catch(err){
 
         if(err.code == "ER_DUP_ENTRY")
-            return {code: 400, message: "Staff già esistente."};
+            return {httpError: {code: 400, message: "Staff già esistente."}};
         else
-            return {code: 500, message: "Errore interno al server"};
+            return {httpError: {code: 500, message: "Errore interno al server"}};
     }
 
     return undefined;
@@ -169,9 +185,9 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
     catch(err){
 
         if(err.code == "ER_DUP_ENTRY")
-            return {code: 400, message: "Vehicle già esistente."};
+            return {httpError: {code: 400, message: "Vehicle già esistente."}};
         else
-            return {code: 500, message: "Errore interno al server"};
+            return {httpError: {code: 500, message: "Errore interno al server"}};
     }
 
     return undefined;

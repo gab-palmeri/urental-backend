@@ -48,9 +48,9 @@ export async function createDriver(driverPayload: any) : Promise<any>{
     catch(err){
 
         if(err.code == "ER_DUP_ENTRY")
-            return {code: 400, message: "Driver già esistente."};
+            return {httpError: {code: 400, message: "Driver già esistente."}};
         else
-            return {code: 500, message: "Errore interno al server"};
+            return {httpError: {code: 500, message: "Errore interno al server"}};
     }
 
     return undefined;
@@ -85,7 +85,7 @@ export async function checkAvailability(bookingPayload:any): Promise<any> {
 			});
 		});
 
-		return {availability: available};
+		return {httpError: undefined, availability: available};
 
     } catch(err)
     {

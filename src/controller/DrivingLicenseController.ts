@@ -16,10 +16,13 @@ export class DrivingLicenseController{
 		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
     	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
 
-		var drivingLicenseFlag:boolean = await hasDrivingLicense(decodedToken['id']);
+		var drivingLicenseFlag = await hasDrivingLicense(decodedToken['id']);
+		if(drivingLicenseFlag.httpError != undefined)
+			return next(createHttpError(drivingLicenseFlag.httpError.code, drivingLicenseFlag.httpError.message));
+
 		var response;
 
-		if(drivingLicenseFlag)
+		if(drivingLicenseFlag.hasDrivingLicense)
 			response = drivingLicenseUpdateSchema.validate(req.body);
 		else 
 			response = drivingLicenseSchema.validate(req.body);
@@ -27,10 +30,10 @@ export class DrivingLicenseController{
         if(response.error != undefined)
             return next(createHttpError(400, response.error.details[0].message));
 
-        Promise.resolve(drivingLicenseService.editOrCreate(decodedToken['id'], req.body)).then(function(httpError){
+        Promise.resolve(drivingLicenseService.editOrCreate(decodedToken['id'], req.body)).then(function(value){
 
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
 
             res.status(200).send();
         });
@@ -41,10 +44,10 @@ export class DrivingLicenseController{
 		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
     	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
 
-        Promise.resolve(drivingLicenseService.deleteLicense(decodedToken['id'])).then(function(httpError){
+        Promise.resolve(drivingLicenseService.deleteLicense(decodedToken['id'])).then(function(value){
 
-            if(httpError != undefined)
-                return next(createHttpError(httpError.code, httpError.message));
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
 
             res.status(200).send();
         });

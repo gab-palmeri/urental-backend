@@ -53,14 +53,14 @@ export async function createUser(userPayload:any, hasDrivingLicense:boolean): Pr
         await getRepository(User).save(user);
         sendActivationLink(user.email);
 
-        return undefined;
+        return {httpError: undefined};
 
     } catch(err)
     {
         if(err.code == "ER_DUP_ENTRY")
-            return {code:400, message:"Utente già esistente"};
+            return {httpError: {code:400, message:"Utente già esistente"}};
         else
-            return {code:500, message:"Errore interno al server"};
+            return {httpError: {code:500, message:"Errore interno al server"}};
     }
 }
 
@@ -105,7 +105,14 @@ export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
 
 export async function activateUser(userEmail:string): Promise<any> {
 
-    const user = await getRepository(User).findOne({where:{'email': userEmail}})
+	var user;
+
+	try {
+		user = await getRepository(User).findOne({where:{'email': userEmail}});
+	} catch (error) {
+		return {httpError: {code:500, message:"Errore interno al server"}};
+	}
+
     if(user != null)
     {
         try {
@@ -115,11 +122,11 @@ export async function activateUser(userEmail:string): Promise<any> {
             return undefined;
 
         } catch (error) {
-            return {code:500, message:"Errore interno al server"};
+            return {httpError: {code:500, message:"Errore interno al server"}};
         }
     }
     else
-        return {code:400, message:"Utente non esistente"};
+        return {httpError: {code:400, message:"Utente non esistente"}};
 }
 
 export async function changePin(userId:number, newPin:string): Promise<any> {
@@ -133,7 +140,7 @@ export async function changePin(userId:number, newPin:string): Promise<any> {
         return undefined;
 
     } catch (error) {
-        return {code:500, message:"Errore interno al server"};
+        return {httpError: {code:500, message:"Errore interno al server"}};
     }
 }
 
@@ -160,15 +167,22 @@ export function decodeToken(userToken:any) {
 	return jwt.verify(userToken, publicKEY);
 }
 
-export async function hasDrivingLicense(userId:number): Promise<boolean>{
+export async function hasDrivingLicense(userId:number): Promise<any>{
 
-	const user = await getRepository(User).findOne({
-		relations: ['drivingLicense'],
-		where: { 'id': userId }
-	});
+	
+	try {
+		const user = await getRepository(User).findOne({
+			relations: ['drivingLicense'],
+			where: { 'id': userId }
+		});
 
-	return user.drivingLicense != undefined;
+		return {httpError: undefined, hasDrivingLicense: user.drivingLicense != undefined};
 
+	} catch (error) {
+
+		return {httpError: {code:500, message:"Errore interno al server"}, hasDrivingLicense:undefined};
+
+	}
 }
 
 function converToCapitalizedCase(words: string): string {
