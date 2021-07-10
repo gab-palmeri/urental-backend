@@ -1,4 +1,3 @@
-import { User } from "../entity/User";
 import { getRepository } from "typeorm";
 import { DrivingLicense } from "../entity/DrivingLicense";
 

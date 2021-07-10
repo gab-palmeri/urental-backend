@@ -4,12 +4,12 @@ import createHttpError from 'http-errors';
 import CryptoJS from 'crypto-js';
 
 import * as fs from 'fs';
-import * as jwt from 'jsonwebtoken';
 
 import { userSchema } from "../schemas/UserSchema";
 import { drivingLicenseSchema } from "../schemas/DrivingLicenseSchema";
 
 import * as userService from '../services/userService';
+import * as tokenService from '../services/tokenService';
 
 export class UserController
 {
@@ -85,10 +85,10 @@ export class UserController
 
 	public async getProfile(req: Request, res: Response, next:any)
 	{
-		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-    	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
 
-		Promise.resolve(userService.getProfile(decodedToken['id'])).then(function(value) {
+		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+
+		Promise.resolve(userService.getProfile(decodedID)).then(function(value) {
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
@@ -103,11 +103,9 @@ export class UserController
         if(req.body.newPin == undefined || req.body.newPin.length != 4)
             return next(createHttpError(400, "Nuovo PIN assente o malformato."));
 
-        const token = req.headers.authorization.split(' ')[1];
-        var publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-        var decoded = jwt.verify(token, publicKEY);
+        let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-        Promise.resolve(userService.changePin(decoded['id'], req.body.newPin)).then(function(value) {
+        Promise.resolve(userService.changePin(decodedID, req.body.newPin)).then(function(value) {
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
             else

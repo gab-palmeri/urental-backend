@@ -1,22 +1,19 @@
 import { Request, Response } from "express";
 import createHttpError from "http-errors";
 
-import * as fs from 'fs';
-import * as jwt from 'jsonwebtoken';
-
 import * as drivingLicenseService from "../services/drivingLicenseService";
 import { hasDrivingLicense } from "../services/userService";
 
 import { drivingLicenseSchema, drivingLicenseUpdateSchema } from "../schemas/DrivingLicenseSchema";
+import * as tokenService from '../services/tokenService';
 
 export class DrivingLicenseController{
 
     public async editOrCreate(req: Request, res: Response, next: any){
 
-		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-    	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
+		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-		var drivingLicenseFlag = await hasDrivingLicense(decodedToken['id']);
+		var drivingLicenseFlag = await hasDrivingLicense(decodedID);
 		if(drivingLicenseFlag.httpError != undefined)
 			return next(createHttpError(drivingLicenseFlag.httpError.code, drivingLicenseFlag.httpError.message));
 
@@ -30,7 +27,7 @@ export class DrivingLicenseController{
         if(response.error != undefined)
             return next(createHttpError(400, response.error.details[0].message));
 
-        Promise.resolve(drivingLicenseService.editOrCreate(decodedToken['id'], req.body)).then(function(value){
+        Promise.resolve(drivingLicenseService.editOrCreate(decodedID, req.body)).then(function(value){
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
@@ -41,10 +38,9 @@ export class DrivingLicenseController{
 
 	public async delete(req: Request, res: Response, next:any)
 	{
-		let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-    	let decodedToken = jwt.verify(req.headers.authorization.split(" ")[1], publicKEY);
+		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-        Promise.resolve(drivingLicenseService.deleteLicense(decodedToken['id'])).then(function(value){
+        Promise.resolve(drivingLicenseService.deleteLicense(decodedID)).then(function(value){
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));

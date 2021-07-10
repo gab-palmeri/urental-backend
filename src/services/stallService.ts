@@ -1,8 +1,7 @@
 import { getRepository, In } from "typeorm";
-import * as fs from "fs";
-import * as jwt from "jsonwebtoken";
 
 import { Stall } from '../entity/Stall';
+import * as tokenService from './tokenService';
 
 export async function getStalls(): Promise<any> {
 
@@ -20,10 +19,10 @@ export async function getStalls(): Promise<any> {
 export async function createStall(stallPayload:any): Promise<any> {
 
 	const token = stallPayload.headers.authorization.split(" ")[1];
-    let httpError = verifyRoleFromToken(token);
+	let isStaff = tokenService.isStaff(token);
 
-    if(httpError != undefined)
-        return httpError;
+    if(!isStaff)
+        return {httpError: {code: 401, message: "Non hai i permessi per effettuare questa richiesta"}};
 
 	let stall = new Stall();
 
@@ -75,16 +74,4 @@ export async function getBookingStalls(pickUpStall:number, deliveryStall:number)
 		return {httpError: {code:500, message:"Errore interno al server"}, stalls: undefined};
 
 	}
-}
-
-
-function verifyRoleFromToken(token: any) : object{
-
-    let publicKEY  = fs.readFileSync('./keys/public.key', 'utf8');
-    let decodedToken = jwt.verify(token, publicKEY);
-
-    if(decodedToken["role"] != 2)
-        return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
-
-    return undefined;
 }
