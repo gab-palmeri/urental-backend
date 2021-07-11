@@ -1,4 +1,4 @@
-import { getRepository, MoreThanOrEqual } from "typeorm";
+import { getRepository, LessThanOrEqual, MoreThanOrEqual } from "typeorm";
 
 import { Driver } from "../entity/Driver";
 import { Payment } from "../entity/Payment";
@@ -95,14 +95,18 @@ export async function getActiveBookings(): Promise<any> {
 
 	try {
 
-		const activeBookings = await getRepository(Booking).find({
+		var oneYearFromNow = new Date();
+		oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+		var activeBookings = await getRepository(Booking).find({
 			select: ["id", "pickUpDateTime", "deliveryDateTime", "status", "vehicle"],
-			relations: ["status", "vehicle"],
+			relations: ["status", "vehicle", "status.staffPickup", "status.staffDelivery"],
 			where: {
-				pickUpDateTime: MoreThanOrEqual(new Date()),
-				deliveryDateTime: MoreThanOrEqual(new Date())
+				pickUpDateTime: LessThanOrEqual(oneYearFromNow)
 			}
 		});
+
+		activeBookings = activeBookings.filter(activeBooking => { return activeBooking.status == null || activeBooking.status.staffDelivery == undefined });
 
 		return {httpError: undefined, activeBookings: activeBookings};
 
