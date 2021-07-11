@@ -24,7 +24,7 @@ export class StaffRoutes{
     }
 }
 
-let addNewVehicleRoute = (app, staffController, JWT_MIDDLEWARE) => {
+function addNewVehicleRoute (app, staffController, JWT_MIDDLEWARE){
 
     const upload = multer().fields([
         { name: "mainImage"},
@@ -58,7 +58,7 @@ let addNewVehicleRoute = (app, staffController, JWT_MIDDLEWARE) => {
     })
 }
 
-let validationPhoto = function(req, res, next){
+function validationPhoto (req, res, next){
 
     if(["4", "5"].includes(req.body.type))
         next();
@@ -79,15 +79,15 @@ let validationPhoto = function(req, res, next){
     }
 }
 
-let generationDirPath = function(req, res, next){
+function generationDirPath (req, res, next){
 
     if(["4", "5"].includes(req.body.type))
         next();
     else{
         req.destionationPaths = [
-            "." + req.files.mainImage[0].originalName.split(".")[1],
-            "." + req.files.photos[0].originalName.split(".")[1],
-            "." + req.files.photos[1].originalName.split(".")[1]
+            req.files.mainImage[0].detectedFileExtension,
+            req.files.photos[0].detectedFileExtension,
+            req.files.photos[1].detectedFileExtension
         ];
         next();
     }
