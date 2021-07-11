@@ -7,6 +7,9 @@ import { jwtSettings } from '../jwtsettings';
 
 import { Mailer } from '../mailer';
 
+import { getTokenUser } from "./tokenService";
+import createHttpError from "http-errors";
+
 export async function authUser(email:string, password:string): Promise<any> {
 
     const user = await getRepository(User).findOne({
@@ -20,14 +23,7 @@ export async function authUser(email:string, password:string): Promise<any> {
     if(user.active == 0)
         return {httpError: {code:401, message:"Utente non attivato. Controlla la mail"}, token: undefined};
 
-    var privateKEY  = fs.readFileSync('./keys/private.key', 'utf8');
-
-    var token = jwt.sign({
-        "id": user.id,
-        'role': 0
-    }, privateKEY, jwtSettings);
-
-    return {httpError: undefined, token: token};
+    return getTokenUser(user.id);
 }
 
 export async function createUser(userPayload:any, hasDrivingLicense:boolean): Promise<any> {
@@ -177,6 +173,22 @@ export async function hasDrivingLicense(userId:number): Promise<any>{
 		return {httpError: {code:500, message:"Errore interno al server"}, hasDrivingLicense:undefined};
 
 	}
+}
+
+export async function getBookingsBy(userId: number): Promise<any>{
+
+    try {
+        const bookings = await getRepository(User).findOne({
+            relations: ["bookings", "bookings.vehicle", "bookings.pickUpStall", "bookings.deliveryStall", "bookings.payment"],
+            where: { "id": userId }
+        });
+
+        return {httpError:undefined, bookings: bookings.bookings};
+
+    } catch (error) {
+        console.log(error);
+        return {httpError: {code: 500, message: "Errore interno al server"}, bookings: undefined};
+    }
 }
 
 function converToCapitalizedCase(words: string): string {
