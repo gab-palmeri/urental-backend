@@ -85,7 +85,6 @@ export class UserController
 
 	public async getProfile(req: Request, res: Response, next:any)
 	{
-
 		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
 		Promise.resolve(userService.getProfile(decodedID)).then(function(value) {
@@ -110,6 +109,20 @@ export class UserController
                 return next(createHttpError(value.httpError.code, value.httpError.message));
             else
                 res.status(200).send();
+        });
+
+    }
+
+    public async getUsersBookings(req: Request, res: Response, next: any){
+
+        let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+
+        Promise.resolve(userService.getBookingsBy(decodedID)).then(function(value) {
+
+            if(value.httpError != undefined)
+                return next(createHttpError(value.httpError.code, value.httpError.message));
+
+            res.status(200).send(value.bookings);
         });
 
     }

@@ -15,14 +15,7 @@ export async function authDriver(email: string, password: string) : Promise<any>
     if(driver == null || !bcrypt.compareSync(password, driver.password))
         return {httpError: {code: 400, message: "Email o password invalidi"}, token: undefined};
 
-    let privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
-
-    let token = jwt.sign({
-        "id": driver.id,
-        "role": 1
-    }, privateKEY, jwtSettings);
-
-    return {httpError: undefined, token: token};
+    return tokenService.getTokenDriver(driver.id);
 }
 
 export async function createDriver(driverPayload: any) : Promise<any>{

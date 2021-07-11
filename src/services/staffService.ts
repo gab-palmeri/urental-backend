@@ -33,22 +33,8 @@ export async function authStaff(email: string, password: string) : Promise<any>{
     if(staff == null || !bcrypt.compareSync(password, staff.password))
         return {httpError: {code: 400, message: "Email o password invalidi"}, token: undefined};
 
-	let privateKEY;
 
-	try {
-
-		privateKEY = fs.readFileSync("./keys/private.key", "utf-8");
-	} catch (error) {
-
-		return {httpError: {code: 500, message: "Errore interno al server"}, token: undefined};
-	}
-
-    let token = jwt.sign({
-        "id": staff.id,
-        "role": 2
-    }, privateKEY, jwtSettings);
-
-    return {httpError: undefined, token: token};
+    return tokenService.getTokenStaff(staff.id);
 }
 
 export async function createStaff(staffPayload: any) : Promise<any>{
