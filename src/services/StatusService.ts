@@ -3,7 +3,7 @@ import {getRepository} from "typeorm";
 import { Status } from "../entity/Status";
 import { Booking } from "../entity/Booking";
 
-export async function editOrCreate(booking: Booking, statusPayload: any){
+export async function editOrCreate(booking: Booking, statusPayload: any) : Promise<any>{
 
     try{
 
@@ -28,5 +28,4 @@ export async function editOrCreate(booking: Booking, statusPayload: any){
         console.log(error);
         return {httpError: {code: 500, message: "Errore interno al server"}};
     }
-
 }
