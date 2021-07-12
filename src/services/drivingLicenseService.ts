@@ -17,6 +17,7 @@ export async function editOrCreate(userId:number,licensePayload:any){
 		});
 
 		await getRepository(DrivingLicense).save(drivingLicense);
+		return {httpError: undefined};
 
 	} catch (error) {
 		return {httpError: {code:500, message:"Errore interno al server"}};
@@ -29,6 +30,7 @@ export async function deleteLicense(userId:number){
 	try{
 		
 		await getRepository(DrivingLicense).delete({"user":userId})
+		return {httpError: undefined};
 
 	} catch (error) {
 		return {httpError: {code:500, message:"Errore interno al server"}};

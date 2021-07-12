@@ -129,9 +129,12 @@ export class BookingController{
 
 	public async getActiveBookings(req: Request, res: Response, next: any){
 
-		const isStaff = tokenService.isStaff(req.headers.authorization.split(" ")[1]);
+		let response = tokenService.isStaff(req.headers.authorization.split(" ")[1]);
 
-		if(!isStaff)
+		if (response.httpError != undefined)
+			return next(createHttpError(response.httpError.code, response.httpError.message));
+
+		if(!response.isStaff)
 			return next(createHttpError(401, "Non hai i permessi per effettuare questa richiesta"));
 
 		Promise.resolve(bookingService.getActiveBookings()).then(value => {

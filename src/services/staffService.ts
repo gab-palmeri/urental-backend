@@ -17,6 +17,7 @@ import {Scooter} from "../entity/Scooter";
 import {VehiclePhoto} from "../entity/VehiclePhoto";
 
 import * as tokenService from "./tokenService";
+import createHttpError from "http-errors";
 
 export async function authStaff(email: string, password: string) : Promise<any>{
 
@@ -24,17 +25,16 @@ export async function authStaff(email: string, password: string) : Promise<any>{
 
 	try {
 
-		 staff = await getRepository(Staff).findOne({where: {"email": email}})
+	    staff = await getRepository(Staff).findOne({where: {"email": email}})
+
+        if(staff == null || !bcrypt.compareSync(password, staff.password))
+            return {httpError: {code: 400, message: "Email o password invalidi"}, token: undefined};
+        else
+            return tokenService.getTokenStaff(staff.id);
+
 	} catch (error) {
-		
 		return {httpError: {code: 500, message: "Errore interno al server"}, token: undefined};
 	}
-
-    if(staff == null || !bcrypt.compareSync(password, staff.password))
-        return {httpError: {code: 400, message: "Email o password invalidi"}, token: undefined};
-
-
-    return tokenService.getTokenStaff(staff.id);
 }
 
 export async function createStaff(staffPayload: any) : Promise<any>{
@@ -57,6 +57,7 @@ export async function createStaff(staffPayload: any) : Promise<any>{
 
     try{
         await getRepository(Staff).save(staff);
+        return {httpError: undefined};
     }
     catch(err){
 
@@ -65,16 +66,16 @@ export async function createStaff(staffPayload: any) : Promise<any>{
         else
             return {httpError: {code: 500, message: "Errore interno al server"}};
     }
-
-    return undefined;
 }
 
 export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : Promise<any>{
 
-    const token = addNewVehiclePayload.headers.authorization.split(" ")[1];
-	let isStaff = tokenService.isStaff(token);
+    let response = tokenService.isStaff(addNewVehiclePayload.headers.authorization.split(" ")[1]);
 
-    if(!isStaff)
+    if (response.httpError != undefined)
+        return response.httpError;
+
+    if(!response.isStaff)
         return {httpError: {code: 401, message: "Non hai i permessi per effettuare questa richiesta"}};
 
     let vehicle = new Vehicle();
@@ -158,6 +159,7 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
 
     try{
         await getRepository(Vehicle).save(vehicle);
+        return {httpError: undefined};
     }
     catch(err){
 
@@ -169,8 +171,6 @@ export async function addNewVehicle(addNewVehiclePayload : any, photosPaths) : P
         }
 
     }
-
-    return {httpError: undefined};
 }
 
 

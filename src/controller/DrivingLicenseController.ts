@@ -11,9 +11,12 @@ export class DrivingLicenseController{
 
     public async editOrCreate(req: Request, res: Response, next: any){
 
-		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+        let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-		var drivingLicenseFlag = await hasDrivingLicense(decodedID);
+        if (decodedID.httpError != undefined)
+            return next(createHttpError(decodedID.httpError.code, decodedID.httpError.message));
+
+		var drivingLicenseFlag = await hasDrivingLicense(decodedID.id);
 		if(drivingLicenseFlag.httpError != undefined)
 			return next(createHttpError(drivingLicenseFlag.httpError.code, drivingLicenseFlag.httpError.message));
 
@@ -27,7 +30,7 @@ export class DrivingLicenseController{
         if(response.error != undefined)
             return next(createHttpError(400, response.error.details[0].message));
 
-        Promise.resolve(drivingLicenseService.editOrCreate(decodedID, req.body)).then(function(value){
+        Promise.resolve(drivingLicenseService.editOrCreate(decodedID.id, req.body)).then(function(value){
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
@@ -38,9 +41,12 @@ export class DrivingLicenseController{
 
 	public async delete(req: Request, res: Response, next:any)
 	{
-		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+        let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-        Promise.resolve(drivingLicenseService.deleteLicense(decodedID)).then(function(value){
+        if (decodedID.httpError != undefined)
+            return next(createHttpError(decodedID.httpError.code, decodedID.httpError.message));
+
+        Promise.resolve(drivingLicenseService.deleteLicense(decodedID.id)).then(function(value){
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
