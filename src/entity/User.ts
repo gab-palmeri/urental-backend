@@ -24,7 +24,7 @@ export class User {
     @Column({type: "varchar", length: 32, nullable: false})
     birthPlace: string;
 
-    @Column({type: "varchar", length: 32, nullable: false, unique: true})
+    @Column({type: "varchar", length: 64, nullable: false, unique: true})
     email: string;
 
     @Column({type: "text", nullable: false, select:false})
