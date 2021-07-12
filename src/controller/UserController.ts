@@ -85,9 +85,12 @@ export class UserController
 
 	public async getProfile(req: Request, res: Response, next:any)
 	{
-		let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+        let response = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-		Promise.resolve(userService.getProfile(decodedID)).then(function(value) {
+        if (response.httpError != undefined)
+            return next(createHttpError(response.httpError.code, response.httpError.message));
+
+		Promise.resolve(userService.getProfile(response.id)).then(function(value) {
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
@@ -97,27 +100,32 @@ export class UserController
         });
 	}
 
-    public async changePin(req: Request, res: Response, next:any)
-    {
-        if(req.body.newPin == undefined || req.body.newPin.length != 4)
+    public async changePin(req: Request, res: Response, next:any) {
+        if (req.body.newPin == undefined || req.body.newPin.length != 4)
             return next(createHttpError(400, "Nuovo PIN assente o malformato."));
 
-        let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-        Promise.resolve(userService.changePin(decodedID, req.body.newPin)).then(function(value) {
+        let response = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+
+        if (response.httpError != undefined)
+            return next(createHttpError(response.httpError.code, response.httpError.message));
+
+        Promise.resolve(userService.changePin(response.id, req.body.newPin)).then(function(value) {
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
             else
                 res.status(200).send();
         });
-
     }
 
     public async getUsersBookings(req: Request, res: Response, next: any){
 
-        let decodedID = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
+        let response = tokenService.getIDBy(req.headers.authorization.split(" ")[1]);
 
-        Promise.resolve(userService.getBookingsBy(decodedID)).then(function(value) {
+        if (response.httpError != undefined)
+            return next(createHttpError(response.httpError.code, response.httpError.message));
+
+        Promise.resolve(userService.getBookingsBy(response.id)).then(function(value) {
 
             if(value.httpError != undefined)
                 return next(createHttpError(value.httpError.code, value.httpError.message));
