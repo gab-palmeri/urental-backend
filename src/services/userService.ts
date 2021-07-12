@@ -116,8 +116,8 @@ export async function sendLateMail(booking:any) {
 
 	var mailBody = "La tua consegna del mezzo [" + booking.vehicle.brand + " " + booking.vehicle.model + "] è in ritardo.\n\n"
 	mailBody += "Portala al più presto allo stallo di consegna in " + booking.deliveryStall.address + ".\n\n"
-	mailBody += "Per non incorrere in un sovrapprezzo, comunicaci la ragione del tuo ritardo rispondendo a questa mail.\
-				Opzionalmente, puoi specificare un nuovo stallo di consegna, se ti è più comodo."
+	mailBody += `Per non incorrere in un sovrapprezzo, comunicaci la ragione del tuo ritardo rispondendo a questa mail.
+				Opzionalmente, puoi specificare un nuovo stallo di consegna, se ti è più comodo.`
 
 
 	Mailer.sendMail(booking.user.email, mailObject, mailBody);
@@ -173,8 +173,7 @@ export async function getProfile(userId:number): Promise<any> {
 			relations: ['drivingLicense'],
 			where: { 'id': userId }
 		});
-		console.log(userId);
-		console.log(user);
+		
         return {httpError:undefined, profile:user};
 
     } catch (error) {
