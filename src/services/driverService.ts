@@ -1,9 +1,6 @@
 import {getRepository} from "typeorm";
-import {jwtSettings} from "../jwtsettings";
 
 import * as bcrypt from "bcryptjs";
-import * as fs from "fs";
-import * as jwt from "jsonwebtoken";
 
 import {Driver} from "../entity/Driver";
 import * as tokenService from "./tokenService";
@@ -38,6 +35,7 @@ export async function createDriver(driverPayload: any) : Promise<any>{
 
     try{
         await getRepository(Driver).save(driver);
+        return {httpError: undefined};
     }
     catch(err){
 
@@ -46,8 +44,6 @@ export async function createDriver(driverPayload: any) : Promise<any>{
         else
             return {httpError: {code: 500, message: "Errore interno al server"}};
     }
-
-    return undefined;
 }
 
 export async function checkAvailability(bookingPayload:any): Promise<any> {

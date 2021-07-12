@@ -11,8 +11,6 @@ import { Status } from './Status';
 @Entity()
 export class Booking {
 
-	//MANCA STATUS
-
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -37,7 +35,7 @@ export class Booking {
     @JoinColumn()
 	payment: Payment;
 
-    @OneToOne(() => Status, status => status.id, {cascade: true})
+    @OneToOne(() => Status, status => status.booking, {cascade: true})
     @JoinColumn()
     status: Status;
 

@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Status} from "./Status";
 
 @Entity()
 
@@ -27,4 +28,10 @@ export class Staff{
 
     @Column({type: "text", nullable: false})
     password: string;
+
+    @OneToMany(() => Status, statusDelivery => statusDelivery.staffDelivery)
+    deliveryStatus: Status[];
+
+    @OneToMany(() => Status, statusPickup => statusPickup.staffPickup)
+    pickupStatus: Status[];
 }
