@@ -11,8 +11,10 @@ export async function editOrCreate(booking: Booking, statusPayload: any) : Promi
 
         if(booking.status != undefined)
             status = booking.status;
-        else
+        else{
             status = new Status();
+            status.booking = booking.id
+        }
 
         Object.keys(statusPayload).forEach( key => {
             status[key] = statusPayload[key]

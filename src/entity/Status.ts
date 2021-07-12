@@ -1,6 +1,7 @@
 import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 
 import { Staff } from "./Staff"
+import { Booking } from "./Booking"
 
 @Entity()
 
@@ -19,4 +20,8 @@ export class Status{
     @OneToOne(() => Staff, staff => staff.id)
     @JoinColumn()
     staffDelivery: Staff;
+
+    @OneToOne(() => Booking, booking => booking.id)
+    @JoinColumn()
+    booking: Booking;
 }
