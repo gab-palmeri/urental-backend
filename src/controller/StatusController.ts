@@ -16,8 +16,11 @@ export class StatusController {
 
 		let decodedToken = tokenService.decodeToken(req.headers.authorization.split(" ")[1])
 
-        if (decodedToken["role"] != 2)
-            return {code: 401, message: "Non hai i permessi per effettuare questa richiesta"};
+		if(decodedToken.httpError != undefined)
+			return next(createHttpError(decodedToken.httpError.code, decodedToken.httpError.message));
+
+        if (decodedToken.token["role"] != 2)
+            return next(createHttpError(401, "Non hai i permessi per effettuare questa richiesta"));
 
         if (req.body.bookingID == undefined)
             return next(createHttpError(400, "bookingID non presente"));
@@ -29,7 +32,7 @@ export class StatusController {
         delete req.body.bookingID;
 
 
-        let result = await Promise.resolve(staffService.getStaffBy(decodedToken["id"]));
+        let result = await Promise.resolve(staffService.getStaffBy(decodedToken.token["id"]));
         if (result.httpError != undefined)
             return next(createHttpError(result.httpError.code, result.httpError.message));
 
@@ -38,10 +41,10 @@ export class StatusController {
 
         if (booking.status != undefined) {
             response = statusUpdateSchema.validate(req.body);
-            req.body.staffDelivery = decodedToken["id"];
+            req.body.staffDelivery = decodedToken.token["id"];
         } else {
             response = statusSchema.validate(req.body);
-            req.body.staffPickup = decodedToken["id"];
+            req.body.staffPickup = decodedToken.token["id"];
         }
 
         if (response.error != undefined)

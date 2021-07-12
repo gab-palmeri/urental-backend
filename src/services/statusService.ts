@@ -24,7 +24,7 @@ export async function editOrCreate(booking: Booking, statusPayload: any) : Promi
 
         await getRepository(Booking).save(booking);
 
-		return {httpError: undefined}
+		return {httpError: undefined, booking: booking}
 
     } catch (error) {
         console.log(error);
