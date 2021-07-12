@@ -46,13 +46,13 @@ export class Mailer
         });
     }
 
-	static async sendBookingMail(userEmail: string, message:string) {
-		
+	static async sendMail(userEmail: string, mailObject:string, mailBody:string)
+	{
 		var mailOptions = {
 			from: Mailer.user,
 			to: userEmail,
-			subject: 'Il tuo noleggio su urental',
-			text: message
+			subject: mailObject,
+			text: mailBody
 		};
 
 		Mailer.transporter.sendMail(mailOptions, function (error, info) {
