@@ -71,10 +71,10 @@ export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
 	var convertedPickUpDateTime = new Date(bookingPayload.pickUpDateTime);
 	var convertedDeliveryDateTime = new Date(bookingPayload.deliveryDateTime);
 
-	var pickUpDate = convertedPickUpDateTime.toLocaleDateString("it-IT");
-	var pickUpTime = convertedPickUpDateTime.toLocaleTimeString("it-IT", {hour12:false})
-	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString("it-IT");
-	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString("it-IT", {hour12:false});
+	var pickUpDate = convertedPickUpDateTime.toLocaleDateString("it-IT", {timeZone: 'Europe/Rome'});
+	var pickUpTime = convertedPickUpDateTime.toLocaleTimeString("it-IT", {timeZone: 'Europe/Rome'})
+	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString("it-IT", {timeZone: 'Europe/Rome'});
+	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString("it-IT", {timeZone: 'Europe/Rome'});
 
 	console.log(convertedPickUpDateTime)
 	console.log(convertedDeliveryDateTime)
