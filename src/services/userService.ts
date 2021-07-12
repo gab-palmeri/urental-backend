@@ -13,7 +13,7 @@ import createHttpError from "http-errors";
 export async function authUser(email:string, password:string): Promise<any> {
 
     const user = await getRepository(User).findOne({
-    	select: ["id", "email", "password"],
+    	select: ["id", "email", "password", "active"],
 		where: { email: email },
 	})
 
