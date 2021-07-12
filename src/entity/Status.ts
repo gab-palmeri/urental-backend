@@ -1,7 +1,8 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 
 import { Staff } from "./Staff"
 import { Booking } from "./Booking"
+import {Stall} from "./Stall";
 
 @Entity()
 
@@ -13,15 +14,12 @@ export class Status{
     @Column({type: "text"})
     description: string;
 
-    @OneToOne(() => Staff, staff => staff.id)
-    @JoinColumn()
-    staffPickup: Staff;
+    @ManyToOne(() => Staff, staffPickup => staffPickup.pickupStatus)
+    staffPickup: Stall;
 
-    @OneToOne(() => Staff, staff => staff.id)
-    @JoinColumn()
-    staffDelivery: Staff;
+    @ManyToOne(() => Staff, staffDelivery => staffDelivery.deliveryStatus)
+    staffDelivery: Stall;
 
-    @OneToOne(() => Booking, booking => booking.id)
-    @JoinColumn()
+    @OneToOne(() => Booking, booking => booking.status)
     booking: Booking;
 }
