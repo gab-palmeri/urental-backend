@@ -19,7 +19,10 @@ export class BookingController{
 
 		const userToken = tokenService.decodeToken(req.headers.authorization.split(' ')[1])
 
-		if(userToken['role'] != 0)
+		if(userToken.httpError != undefined)
+			return next(createHttpError(userToken.httpError.code, userToken.httpError.message));
+
+		if(userToken.token['role'] != 0)
 			return next(createHttpError(401, "Devi avere un account utente per effettuare una prenotazione"));
 
 		//PARTE VALIDAZIONE
@@ -62,7 +65,7 @@ export class BookingController{
 			if(response[2])
 				driver = response[2].driver;
 			
-			var userId = userToken['id']
+			var userId = userToken.token['id']
 
 			Promise.resolve(
 				bookingService.createBooking(
