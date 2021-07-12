@@ -98,7 +98,29 @@ export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
 		mailBody += "La corsa terminerà alle ore ore " + deliveryTime + ", in " + bookingPayload.deliveryStall.address + ".\n";
 	}
 
-    Mailer.sendBookingMail(userEmail, mailBody);
+    Mailer.sendMail(userEmail, 'Il tuo noleggio su urental', mailBody);
+
+}
+
+export async function sendLateMail(booking:any) {
+
+	var mailObject = "Attenzione - Sei in ritardo con la consegna!"
+
+	var convertedPickUpDateTime = new Date(booking.pickUpDateTime);
+	var convertedDeliveryDateTime = new Date(booking.deliveryDateTime);
+
+	var pickUpDate = convertedPickUpDateTime.toLocaleDateString("it-IT", {timeZone: 'Europe/Rome'});
+	var pickUpTime = convertedPickUpDateTime.toLocaleTimeString("it-IT", {timeZone: 'Europe/Rome'})
+	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString("it-IT", {timeZone: 'Europe/Rome'});
+	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString("it-IT", {timeZone: 'Europe/Rome'});
+
+	var mailBody = "La tua consegna del mezzo [" + booking.vehicle.brand + " " + booking.vehicle.model + "] è in ritardo.\n\n"
+	mailBody += "Portala al più presto allo stallo di consegna in " + booking.deliveryStall.address + ".\n\n"
+	mailBody += "Per non incorrere in un sovrapprezzo, comunicaci la ragione del tuo ritardo rispondendo a questa mail.\
+				Opzionalmente, puoi specificare un nuovo stallo di consegna, se ti è più comodo."
+
+
+	Mailer.sendMail(booking.user.email, mailObject, mailBody);
 
 }
 
@@ -151,7 +173,8 @@ export async function getProfile(userId:number): Promise<any> {
 			relations: ['drivingLicense'],
 			where: { 'id': userId }
 		});
-
+		console.log(userId);
+		console.log(user);
         return {httpError:undefined, profile:user};
 
     } catch (error) {
