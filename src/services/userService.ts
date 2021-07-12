@@ -76,13 +76,6 @@ export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
 	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString("it-IT", {timeZone: 'Europe/Rome'});
 	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString("it-IT", {timeZone: 'Europe/Rome'});
 
-	console.log(convertedPickUpDateTime)
-	console.log(convertedDeliveryDateTime)
-	console.log(pickUpDate)
-	console.log(pickUpTime)
-	console.log(deliveryDate)
-	console.log(deliveryTime)
-
 	var mailBody = "Grazie per aver scelto i nostri servizi.\n\n"
 
 	if(bookingPayload.driver == undefined)
