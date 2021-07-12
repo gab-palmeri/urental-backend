@@ -76,7 +76,7 @@ export async function getBookingBy(bookingID: number): Promise<any>{
 
 	try {
 		const booking = await getRepository(Booking).findOne({
-			relations: ["status", "user", "vehicle", "deliveryStall"],
+			relations: ["status", "user", "vehicle", "deliveryStall", "status.staffDelivery"],
 			where: { id: bookingID}
 		});
 

@@ -59,12 +59,20 @@ export class StatusController {
 			if(value.booking.status.staffDelivery == undefined)
 			{
 				//Calculate the time between the delivery time (plus a margin) and the actual time
-				const deliveryDateTimeWithMargin = new Date(booking.deliveryDateTime.getTime() + 5*60000);
+				const deliveryDateTimeWithMargin = new Date(booking.deliveryDateTime.getTime() + 0*60000);
 				const time = deliveryDateTimeWithMargin.getTime() - new Date().getTime();
 
 				//After that time has elapsed, check if the vehicle has already been delivered: if not, the user is late
 				setTimeout(async () => {
-					
+
+					let {httpError, booking} = await Promise.resolve(getBookingBy(value.booking.id));
+
+					if(httpError != undefined)
+					{
+						console.log(httpError);
+						return;
+					}
+
 					if(booking.status.staffDelivery == undefined)
 						userService.sendLateMail(booking);
 					else 

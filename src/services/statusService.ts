@@ -22,9 +22,9 @@ export async function editOrCreate(booking: Booking, statusPayload: any) : Promi
 
         booking.status = status;
 
-        await getRepository(Booking).save(booking);
+        let insertedBooking = await getRepository(Booking).save(booking);
 
-		return {httpError: undefined, booking: booking}
+		return {httpError: undefined, booking: insertedBooking}
 
     } catch (error) {
         console.log(error);
