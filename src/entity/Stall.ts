@@ -17,10 +17,12 @@ export class Stall {
 	@Column({type: "varchar", length:30})
     city: string;
 
-	@OneToMany(() => Booking, booking => booking.user)
+	@OneToMany(() => Booking, booking => booking.pickUpStall)
+    pickUpBookings: Booking[];
+
+	@OneToMany(() => Booking, booking => booking.deliveryStall)
     deliveryBookings: Booking[];
 
-	@OneToMany(() => Booking, booking => booking.user)
-    returnBookings: Booking[];
+	
 
 }

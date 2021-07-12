@@ -30,7 +30,7 @@ export class Booking {
 	@ManyToOne(() => Stall, stall => stall.deliveryBookings, {nullable:false})
     pickUpStall: Stall;
 
-	@ManyToOne(() => Stall, stall => stall.returnBookings, {nullable:false})
+	@ManyToOne(() => Stall, stall => stall.pickUpBookings, {nullable:false})
     deliveryStall: Stall;
 
 	@OneToOne(() => Payment, payment => payment.booking, {nullable:false, cascade : true})
