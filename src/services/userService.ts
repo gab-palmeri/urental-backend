@@ -71,13 +71,10 @@ export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
 	var convertedPickUpDateTime = new Date(bookingPayload.pickUpDateTime);
 	var convertedDeliveryDateTime = new Date(bookingPayload.deliveryDateTime);
 
-	convertedPickUpDateTime.setTime(convertedPickUpDateTime.getTime() + (2*60*60*1000));
-	convertedDeliveryDateTime.setTime(convertedDeliveryDateTime.getTime() + (2*60*60*1000));
-
-	var pickUpDate = convertedPickUpDateTime.toLocaleDateString();
-	var pickUpTime = convertedPickUpDateTime.toLocaleTimeString()
-	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString();
-	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString();
+	var pickUpDate = convertedPickUpDateTime.toLocaleDateString("it-IT");
+	var pickUpTime = convertedPickUpDateTime.toLocaleTimeString("it-IT", {hour12:false})
+	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString("it-IT");
+	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString("it-IT", {hour12:false});
 
 	var mailBody = "Grazie per aver scelto i nostri servizi.\n\n"
 
