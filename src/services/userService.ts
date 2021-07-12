@@ -118,7 +118,7 @@ export async function activateUser(userEmail:string): Promise<any> {
             user.active = 1;
             await getRepository(User).save(user);
 
-            return undefined;
+            return {httpError: undefined};
 
         } catch (error) {
             return {httpError: {code:500, message:"Errore interno al server"}};
@@ -136,7 +136,7 @@ export async function changePin(userId:number, newPin:string): Promise<any> {
         user.pin = newPin;
         await getRepository(User).save(user);
 
-        return undefined;
+        return {httpError: undefined};
 
     } catch (error) {
         return {httpError: {code:500, message:"Errore interno al server"}};
