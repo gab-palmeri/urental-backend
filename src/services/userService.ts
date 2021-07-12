@@ -68,10 +68,16 @@ async function sendActivationLink(userEmail:string) {
 
 export async function sendBookingInfos(userEmail:string, bookingPayload:any) {
 
-	var pickUpDate = bookingPayload.pickUpDateTime.split('T')[0];
-	var pickUpTime = bookingPayload.pickUpDateTime.split('T')[1].slice(0,5);
-	var deliveryDate = bookingPayload.deliveryDateTime.split('T')[0];
-	var deliveryTime = bookingPayload.deliveryDateTime.split('T')[1].slice(0,5);
+	var convertedPickUpDateTime = new Date(bookingPayload.pickUpDateTime);
+	var convertedDeliveryDateTime = new Date(bookingPayload.deliveryDateTime);
+
+	convertedPickUpDateTime.setTime(convertedPickUpDateTime.getTime() + (2*60*60*1000));
+	convertedDeliveryDateTime.setTime(convertedDeliveryDateTime.getTime() + (2*60*60*1000));
+
+	var pickUpDate = convertedPickUpDateTime.toLocaleDateString();
+	var pickUpTime = convertedPickUpDateTime.toLocaleTimeString()
+	var deliveryDate = convertedDeliveryDateTime.toLocaleDateString();
+	var deliveryTime = convertedDeliveryDateTime.toLocaleTimeString();
 
 	var mailBody = "Grazie per aver scelto i nostri servizi.\n\n"
 
